@@ -4,77 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dandevri.es</title>
-    <style>
-      :root {
-        --color-primary: #111;
-        --color-secondary: #fff;
-        --space-s: 2em;
-        --font: sans-serif;
-      }
-
-      img {
-        max-width: 100%;
-      }
-
-      .projects {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-      }
-
-      .projects li {
-        border-right: 1px solid white;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6,
-      p {
-        font-weight: 400;
-        line-height: 1.8;
-      }
-
-      ol,
-      ul,
-      li {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-      }
-
-      ol {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-gap: var(--space-s);
-        max-width: 65vw;
-      }
-
-      body {
-        background: var(--color-primary);
-        color: var(--color-secondary);
-        margin: var(--space-s);
-        font-family: var(--font);
-        font-size: 1.3em;
-      }
-
-      header,
-      p {
-        max-width: 65vw;
-      }
-
-      article {
-        display: grid;
-        grid-template-columns: 20vw 1fr 1fr;
-        min-height: 150vh;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
   </head>
   <body>
+    <div class="pixelate"></div>
     <header>
       <h1>Danny de Vries</h1>
       <h2>
@@ -86,8 +20,20 @@
       </h2>
     </header>
     <main>
+      <nav>
+        <ol>
+          <li><span>[^i]</span>/index</li>
+          <li><span>[^w]</span>/writing</li>
+          <li><span>[^e]</span>/experience</li>
+          <li><span>[^c]</span>/contact</li>
+        </ol>
+      </nav>
       <section>
-        <h2>Current Projects</h2>
+        <div class="block">
+          <span class="number">[02]</span>
+          <h2>Projects</h2>
+          <span class="background">Projects</span>
+        </div>
         <article>
           <div>
             <h3>Urban Mapping Initiative</h3>
@@ -166,8 +112,12 @@
           </figure>
         </article>
       </section>
-      <section>
-        <h2>Core Values</h2>
+      <section class="principles">
+        <div class="block">
+          <span class="number">[03]</span>
+          <h2>Core values</h2>
+          <span class="background">Corevalues</span>
+        </div>
         <ol>
           <li>
             <span>1</span>
@@ -187,43 +137,88 @@
         </ol>
       </section>
       <section>
-        <h2>Writing</h2>
+        <div class="block">
+          <span class="number">[04]</span>
+          <h2>Writing</h2>
+          <span class="background">Writing</span>
+        </div>
         <ul class="projects">
           <li>
-            <h3>Digital Landscapes</h3>
-            <date>Published: 01.03.2024</date>
+            <div>
+              <h3>Digital Landscapes</h3>
+              <span>#097</span>
+            </div>
+            <time datetime="2018-07-07">July 7, 2024</time>
           </li>
           <li>
-            <h3>AI & Design</h3>
-            <date>Published: 15.02.2024</date>
+            <div>
+              <h3>Digital Landscapes</h3>
+              <span>#097</span>
+            </div>
+            <time datetime="2018-07-07">July 7, 2024</time>
           </li>
-                    <li>
-            <h3>AI & Design</h3>
-            <date>Published: 15.02.2024</date>
+          <li>
+            <div>
+              <h3>Digital Landscapes</h3>
+              <span>#097</span>
+            </div>
+            <time datetime="2018-07-07">July 7, 2024</time>
           </li>
-                    <li>
-            <h3>AI & Design</h3>
-            <date>Published: 15.02.2024</date>
+          <li>
+            <div>
+              <h3>Digital Landscapes</h3>
+              <span>#097</span>
+            </div>
+            <time datetime="2018-07-07">July 7, 2024</time>
           </li>
-                    <li>
-            <h3>AI & Design</h3>
-            <date>Published: 15.02.2024</date>
+          <li>
+            <div>
+              <h3>Digital Landscapes</h3>
+              <span>#097</span>
+            </div>
+            <time datetime="2018-07-07">July 7, 2024</time>
           </li>
-                    <li>
-            <h3>AI & Design</h3>
-            <date>Published: 15.02.2024</date>
+          <li>
+            <div>
+              <h3>Digital Landscapes</h3>
+              <span>#097</span>
+            </div>
+            <time datetime="2018-07-07">July 7, 2024</time>
           </li>
-                    <li>
-            <h3>AI & Design</h3>
-            <date>Published: 15.02.2024</date>
+          <li>
+            <div>
+              <h3>Digital Landscapes</h3>
+              <span>#097</span>
+            </div>
+            <time datetime="2018-07-07">July 7, 2024</time>
           </li>
-                    <li>
-            <h3>AI & Design</h3>
-            <date>Published: 15.02.2024</date>
+          <li>
+            <div>
+              <h3>Digital Landscapes</h3>
+              <span>#097</span>
+            </div>
+            <time datetime="2018-07-07">July 7, 2024</time>
           </li>
-                    <li>
-            <h3>AI & Design</h3>
-            <date>Published: 15.02.2024</date>
+          <li>
+            <div>
+              <h3>Digital Landscapes</h3>
+              <span>#097</span>
+            </div>
+            <time datetime="2018-07-07">July 7, 2024</time>
+          </li>
+          <li>
+            <div>
+              <h3>Digital Landscapes</h3>
+              <span>#097</span>
+            </div>
+            <time datetime="2018-07-07">July 7, 2024</time>
+          </li>
+          <li>
+            <div>
+              <h3>Digital Landscapes</h3>
+              <span>#097</span>
+            </div>
+            <time datetime="2018-07-07">July 7, 2024</time>
           </li>
 
         </ul>
@@ -237,13 +232,19 @@
           education includes a BS in Communication Design and Innovation
           Studies.
         </p>
-        <ul>
+        <ul class="grid">
           <li>
-            <h3>Lead Experience Designer</h3>
-            <h4>Innovate Labs / <date>2021 - Present</date></h4>
+            <h3>Senior Lecturer Creative Technology</h3>
+            <h4>Amsterdam University of Applied Sciences (AUAS) / <date>2018 - Present</date></h4>
             <p>
-              Spearheading user experience research and interactive design for
-              AI-driven urban planning tools.
+              Coordinator, lecturer and coach at CMD Amsterdam, a human-centred and context-sensitive bachelor-level design education in the field of interactive digital products and services. I lecture about emerging technologies, ubiquitous computing and designing for the web in the technical courses of our program such as; 3D, IoT, Ubicomp, front-end, back-end & data visualization.
+            </p>
+          </li>
+          <li>
+            <h3>Senior Lecturer Creative Technology</h3>
+            <h4>Amsterdam University of Applied Sciences (AUAS) / <date>2018 - Present</date></h4>
+            <p>
+              Coordinator, lecturer and coach at CMD Amsterdam, a human-centred and context-sensitive bachelor-level design education in the field of interactive digital products and services. I lecture about emerging technologies, ubiquitous computing and designing for the web in the technical courses of our program such as; 3D, IoT, Ubicomp, front-end, back-end & data visualization.
             </p>
           </li>
         </ul>
