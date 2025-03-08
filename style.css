@@ -93,7 +93,7 @@ footer ul {
 }
 
 .logo {
-  opacity: 0.1;
+  opacity: 0;
 }
 
 .input,
@@ -108,13 +108,24 @@ footer ul li:first-of-type {
 .logo {
   font-family: "Redaction-100";
   color: #fdfdfd;
+  animation: fadein 100ms 100ms ease forwards;
+}
+
+@keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0.1;
+  }
 }
 
 h1 span {
   opacity: 0;
 }
 
-h1 span:nth-of-type(1) {
+/* h1 span:nth-of-type(1) {
   animation: opacity 100ms 1s ease forwards;
 }
 
@@ -131,7 +142,7 @@ h1 span:nth-of-type(4) {
 }
 h1 span:nth-of-type(5) {
   animation: opacity 100ms 2s ease forwards;
-}
+} */
 
 @keyframes opacity {
   0% {

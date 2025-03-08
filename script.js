@@ -128,17 +128,22 @@ let highlightTwo = baffle(document.querySelector(".highlight-two"), {
 
 highlightTwo.reveal(1000, 6500);
 
-let logo = baffle(document.querySelector(".logo"), {
+let logoOne = baffle(document.querySelector(".logo"), {
   speed: 25,
 });
 
-logo.reveal(250, 9750);
+logoOne.reveal(500, 100);
 
-let steps = baffle(document.querySelectorAll(".step"), {
+let footerOne = baffle(document.querySelector("footer li:nth-of-type(1)"), {
   speed: 25,
 });
 
-steps.reveal(250, 9750);
+let footerTwo = baffle(document.querySelector("footer li:nth-of-type(2)"), {
+  speed: 25,
+});
+
+footerOne.reveal(250, 100);
+footerTwo.reveal(250, 100);
 
 const now = new Date();
 
