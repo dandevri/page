@@ -134,13 +134,19 @@ let logoOne = baffle(document.querySelector(".logo"), {
 
 logoOne.reveal(500, 100);
 
-let footerOne = baffle(document.querySelector("footer li:nth-of-type(1)"), {
-  speed: 25,
-});
+let footerOne = baffle(
+  document.querySelector("footer li:nth-of-type(1) span"),
+  {
+    speed: 25,
+  }
+);
 
-let footerTwo = baffle(document.querySelector("footer li:nth-of-type(2)"), {
-  speed: 25,
-});
+let footerTwo = baffle(
+  document.querySelector("footer li:nth-of-type(2) span"),
+  {
+    speed: 25,
+  }
+);
 
 footerOne.reveal(250, 100);
 footerTwo.reveal(250, 100);
@@ -206,3 +212,37 @@ document.addEventListener("visibilitychange", function () {
     changeFavicon(originalFavicon);
   }
 });
+
+function start(target, name) {
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      let element = document.querySelector(`${target}`);
+      if (target) {
+        element.classList.add(name);
+      }
+    }
+  });
+}
+
+function message(target) {
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      let element = document.querySelector(`${target}`);
+      if (target) {
+        element.textContent = "[system status ok]";
+        let footerThree = baffle(
+          document.querySelector("footer li:nth-of-type(1) span"),
+          {
+            speed: 25,
+          }
+        );
+        footerThree.reveal(250, 0);
+      }
+    }
+  });
+}
+
+message("footer ul li:nth-of-type(1) span");
+start("input", "show");
+start(".booting", "hide");
+start(".intro", "show");

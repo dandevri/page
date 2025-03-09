@@ -71,7 +71,7 @@ footer ul {
   display: flex;
 }
 
-.input {
+.booting {
   height: 98vh;
   overflow: hidden;
   position: absolute;
@@ -94,11 +94,6 @@ footer ul {
 
 .logo {
   opacity: 0;
-}
-
-.input,
-.logo {
-  animation: fadeOut 250ms 9750ms ease forwards;
 }
 
 footer ul li:first-of-type {
@@ -275,9 +270,22 @@ input {
   padding-left: 2.5em;
   font-family: "Departure Mono", monospace;
   font-size: 1em;
+  opacity: 0;
 }
 
 .intro span {
   max-width: 30vw;
   display: inline-block;
+}
+
+.intro {
+  opacity: 0;
+}
+
+.show {
+  opacity: 1;
+}
+
+.hide {
+  visibility: hidden;
 }
