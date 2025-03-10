@@ -85,6 +85,18 @@ footer ul {
   background: var(--color-secondary);
   margin-left: var(--space-m);
   color: var(--color-primary);
+  text-transform: uppercase;
+}
+
+.subtitle {
+  margin-left: var(--space-m);
+  text-transform: uppercase;
+}
+
+.header {
+  margin-left: var(--space-m);
+  color: var(--color-secondary);
+  text-transform: uppercase;
 }
 
 .step {
@@ -119,25 +131,6 @@ footer ul li:first-of-type {
 h1 span {
   opacity: 0;
 }
-
-/* h1 span:nth-of-type(1) {
-  animation: opacity 100ms 1s ease forwards;
-}
-
-h1 span:nth-of-type(2) {
-  animation: opacity 100ms 500ms ease forwards;
-}
-
-h1 span:nth-of-type(3) {
-  animation: opacity 100ms 2500ms ease forwards;
-}
-
-h1 span:nth-of-type(4) {
-  animation: opacity 100ms 1500ms ease forwards;
-}
-h1 span:nth-of-type(5) {
-  animation: opacity 100ms 2s ease forwards;
-} */
 
 @keyframes opacity {
   0% {
@@ -175,7 +168,7 @@ h1 span:nth-of-type(5) {
   }
 }
 
-.step {
+.booting .step {
   opacity: 0;
 }
 
@@ -273,7 +266,11 @@ input {
   opacity: 0;
 }
 
-.intro span {
+.intro span,
+.contact span,
+.biography span,
+.projects span,
+.version span {
   max-width: 30vw;
   display: inline-block;
 }
@@ -288,4 +285,36 @@ input {
 
 .hide {
   visibility: hidden;
+}
+
+.stripes {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.description {
+  margin-left: 4em;
+  font-weight: 600;
+}
+
+.description-large {
+  margin-left: 6em;
+}
+
+.asci {
+  margin-left: 2em;
+  max-width: 40vw;
+}
+
+.list {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px dotted rgb(80, 80, 80);
+  margin-left: 2em;
+  max-width: 30vw;
+}
+
+svg {
+  margin-left: 2em;
 }

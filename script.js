@@ -42,7 +42,6 @@ function pixelate() {
 pixelate();
 
 /* Loading baffles */
-
 let headingTwos = baffle(document.querySelectorAll("h2"), {
   speed: 75,
 });
