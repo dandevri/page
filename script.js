@@ -213,35 +213,77 @@ document.addEventListener("visibilitychange", function () {
 });
 
 function start(target, name) {
+  let bootFinished = false;
+  let booting = document.querySelector("footer li:nth-of-type(1) span");
+
+  setTimeout(function () {
+    bootFinished = true;
+  }, 10000);
+
+  function activate() {
+    if (!bootFinished) return;
+
+    let element = document.querySelector(`${target}`);
+    if (element) {
+      element.classList.add(name);
+      booting.textContent = "[system status ok]";
+      let footerThree = baffle(
+        document.querySelector("footer li:nth-of-type(1) span"),
+        {
+          speed: 25,
+        }
+      );
+      footerThree.reveal(250, 0);
+    }
+  }
+
   document.addEventListener("keydown", function (event) {
-    if (event.key === "Enter") {
-      let element = document.querySelector(`${target}`);
-      if (target) {
-        element.classList.add(name);
-      }
+    if (event.key === " " && bootFinished) {
+      event.preventDefault();
+      activate();
     }
   });
+
+  document.addEventListener("click", activate);
+  document.addEventListener("touchstart", activate);
 }
 
-function message(target) {
-  document.addEventListener("keydown", function (event) {
-    if (event.key === "Enter") {
-      let element = document.querySelector(`${target}`);
-      if (target) {
-        element.textContent = "[system status ok]";
-        let footerThree = baffle(
-          document.querySelector("footer li:nth-of-type(1) span"),
-          {
-            speed: 25,
-          }
-        );
-        footerThree.reveal(250, 0);
-      }
-    }
-  });
-}
-
-message("footer ul li:nth-of-type(1) span");
 start("input", "show");
 start(".booting", "hide");
 start(".intro", "show");
+
+document.addEventListener("DOMContentLoaded", function () {
+  const inputField = document.getElementById("search");
+  const lists = document.querySelectorAll("ul[data-category]");
+  const intro = document.querySelector(".intro");
+
+  inputField.addEventListener("input", function () {
+    const query = inputField.value.trim().toLowerCase();
+    let matchFound = false; // Track if any match is found
+
+    lists.forEach((ul) => {
+      ul.style.display = "none"; // Hide all lists initially
+    });
+
+    if (query === "") {
+      intro.style.display = "block"; // Show intro if input is empty
+      return;
+    }
+
+    lists.forEach((ul) => {
+      const categories = ul.dataset.category.split(" ");
+
+      if (
+        categories.includes(query) ||
+        categories.includes(`-${query}`) ||
+        categories.includes(`--${query}`)
+      ) {
+        ul.style.display = "block"; // Show the matching ul
+        matchFound = true; // A match was found
+      }
+    });
+
+    // Only hide .intro if a match was found
+    intro.style.display = matchFound ? "none" : "block";
+  });
+});

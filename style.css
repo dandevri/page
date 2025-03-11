@@ -318,3 +318,7 @@ input {
 svg {
   margin-left: 2em;
 }
+
+ul[data-category] {
+  display: none;
+}
