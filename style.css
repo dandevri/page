@@ -69,6 +69,7 @@ footer {
 
 footer ul {
   display: flex;
+  justify-content: space-between;
 }
 
 .booting {
@@ -321,4 +322,43 @@ svg {
 
 ul[data-category] {
   display: none;
+}
+
+.asci-os {
+  width: 15vw;
+  margin-left: 2em;
+}
+
+a,
+a:visited {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+}
+
+.designtitle {
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+}
+
+footer div {
+  display: flex;
+}
+
+.rotate {
+  display: inline-block;
+  animation: rotate 5s linear infinite;
+  transform-origin: center center;
+  text-align: center;
+  vertical-align: baseline;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

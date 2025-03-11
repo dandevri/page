@@ -218,7 +218,7 @@ function start(target, name) {
 
   setTimeout(function () {
     bootFinished = true;
-  }, 10000);
+  }, 0);
 
   function activate() {
     if (!bootFinished) return;
@@ -227,6 +227,7 @@ function start(target, name) {
     if (element) {
       element.classList.add(name);
       booting.textContent = "[system status ok]";
+
       let footerThree = baffle(
         document.querySelector("footer li:nth-of-type(1) span"),
         {
@@ -287,3 +288,73 @@ document.addEventListener("DOMContentLoaded", function () {
     intro.style.display = matchFound ? "none" : "block";
   });
 });
+
+const randomNumber = Math.floor(Math.random() * 10001);
+const visitorElement = document.querySelector(".visitor");
+visitorElement.textContent = randomNumber;
+
+function getRandomJobTitle() {
+  const jobTitles = [
+    "Software Engineer",
+    "Product Manager",
+    "UX Designer",
+    "Data Scientist",
+    "DevOps Engineer",
+    "Marketing Specialist",
+    "Cybersecurity Analyst",
+    "AI Researcher",
+    "Technical Writer",
+    "Project Manager",
+  ];
+  return jobTitles[Math.floor(Math.random() * jobTitles.length)];
+}
+
+function insertJobTitle() {
+  const titleElement = document.querySelector(".designtitle");
+  if (titleElement) {
+    titleElement.textContent = getRandomJobTitle();
+  } else {
+    console.error("Element with class 'designtitle' not found.");
+  }
+}
+
+// Add event listener to update job title on click
+document.addEventListener("DOMContentLoaded", () => {
+  const titleElement = document.querySelector(".designtitle");
+  if (titleElement) {
+    titleElement.addEventListener("click", insertJobTitle);
+    insertJobTitle(); // Set initial job title
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  function updateWindowResolution() {
+    const resolutionElement = document.querySelector(".resolution");
+    resolutionElement.textContent = `${window.innerWidth} x ${window.innerHeight}`;
+  }
+
+  updateWindowResolution();
+  window.addEventListener("resize", updateWindowResolution);
+});
+
+function updateTime() {
+  const currentTimeElement = document.querySelector(".currenttime");
+
+  // Get the current time
+  const now = new Date();
+  const hours = now.getHours().toString().padStart(2, "0");
+  const minutes = now.getMinutes().toString().padStart(2, "0");
+  const seconds = now.getSeconds().toString().padStart(2, "0");
+
+  // Format time as HH:MM:SS
+  const timeString = `${hours}:${minutes}:${seconds}`;
+
+  // Display the time inside the currenttime element
+  currentTimeElement.textContent = timeString;
+}
+
+// Call updateTime immediately to show the time instantly
+updateTime();
+
+// Set interval to update the time every second (1000ms)
+setInterval(updateTime, 1000);
