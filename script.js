@@ -337,6 +337,15 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("resize", updateWindowResolution);
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  function getNavigator() {
+    const navigatorElement = document.querySelector(".navigator");
+    navigatorElement.textContent = `${navigator.platform}`;
+  }
+
+  getNavigator();
+});
+
 function updateTime() {
   const currentTimeElement = document.querySelector(".currenttime");
 

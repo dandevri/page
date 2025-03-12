@@ -22,6 +22,58 @@
   --grid-m: 1fr 1fr 1fr;
 }
 
+.theme-matrix {
+  --color-primary: #0f2015;
+  --color-secondary: #01f801;
+}
+
+.theme-neon {
+  --color-primary: #221a2e;
+  --color-secondary: #a95fe9;
+}
+
+.theme-system {
+  --color-primary: #0a192e;
+  --color-secondary: #00b7ff;
+}
+
+/* https://www.magicpattern.design/tools/css-backgrounds */
+
+.bg-dots {
+  background-color: #000;
+  opacity: 1;
+  background-image: radial-gradient(#1f1f1f 0.25px, #000 0.25px);
+  background-size: 5px 5px;
+}
+
+.bg-squares {
+  background-color: #000;
+  opacity: 1;
+  background-image: linear-gradient(
+      #1f1f1f 0.6000000000000001px,
+      transparent 0.6000000000000001px
+    ),
+    linear-gradient(
+      to right,
+      #1f1f1f 0.6000000000000001px,
+      #000 0.6000000000000001px
+    );
+  background-size: 5px 5px;
+}
+
+.bg-lines {
+  background-color: #000;
+  opacity: 1;
+  background-size: 5px 5px;
+  background-image: repeating-linear-gradient(
+    0deg,
+    #1f1f1f,
+    #1f1f1f 0.6000000000000001px,
+    #000 0.6000000000000001px,
+    #000
+  );
+}
+
 body {
   box-sizing: border-box;
   margin: 0;
@@ -47,7 +99,6 @@ h1 {
 }
 
 .splash {
-  background: var(--color-primary);
   color: var(--color-secondary);
   font-family: "Departure Mono", monospace;
   font-size: var(--size-s);
