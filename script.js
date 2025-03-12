@@ -249,7 +249,7 @@ function start(target, name) {
   document.addEventListener("touchstart", activate);
 }
 
-start("input", "show");
+start(".search", "show");
 start(".booting", "hide");
 start(".intro", "show");
 

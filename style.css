@@ -37,6 +37,10 @@
   --color-secondary: #00b7ff;
 }
 
+img {
+  max-width: 100%;
+}
+
 /* https://www.magicpattern.design/tools/css-backgrounds */
 
 .bg-dots {
@@ -304,18 +308,32 @@ h1 span {
   background: var(--color-primary);
 }
 
-input {
+.search {
+  display: flex;
+  align-items: center;
+  opacity: 0;
   position: absolute;
   bottom: 64px;
-  left: 0;
+  left: 0em;
   width: 100%;
   height: 3.56vh;
+  background: white;
+  color: black;
+}
+
+label {
+  margin-left: 2em;
+}
+
+input {
   border: none;
   background: white;
-  padding-left: 2.5em;
+  margin-left: 1.5em;
   font-family: "Departure Mono", monospace;
   font-size: 1em;
-  opacity: 0;
+  height: 96%;
+  outline: none;
+  width: 100%;
 }
 
 .intro span,
@@ -412,4 +430,20 @@ footer div {
   100% {
     transform: rotate(360deg);
   }
+}
+
+figure {
+  width: 30vw;
+  margin-left: 2em;
+  border: 5px solid white;
+}
+
+figcaption {
+  background: white;
+  color: black;
+}
+
+figure img {
+  height: 20vh;
+  object-fit: cover;
 }
