@@ -218,7 +218,7 @@ function start(target, name) {
 
   setTimeout(function () {
     bootFinished = true;
-  }, 0);
+  }, 9000);
 
   function activate() {
     if (!bootFinished) return;
@@ -257,12 +257,48 @@ document.addEventListener("DOMContentLoaded", function () {
   const inputField = document.getElementById("search");
   const lists = document.querySelectorAll("ul[data-category]");
   const intro = document.querySelector(".intro");
+  let isShutdown = false; // Track shutdown state
 
   inputField.addEventListener("input", function () {
+    // Prevent input if shutdown has been triggered
+    if (isShutdown) {
+      inputField.value = "";
+      return;
+    }
+
     const query = inputField.value.trim().toLowerCase();
     let matchFound = false; // Track if any match is found
 
     console.log(query);
+
+    // Check for quit commands
+    if (query === "q" || query === "-q" || query === "quit" || query === "--quit") {
+      isShutdown = true;
+      
+      // Hide all lists
+      lists.forEach((ul) => {
+        ul.style.display = "none";
+      });
+      intro.style.display = "none";
+
+      // Show shutdown screen
+      const shutdownScreen = document.querySelector('ul[data-category="-q q quit --quit"]');
+      if (shutdownScreen) {
+        shutdownScreen.style.display = "block";
+      }
+
+      // Update system status
+      const systemStatus = document.querySelector(".system-status");
+      if (systemStatus) {
+        systemStatus.textContent = "[system shutdown...]";
+      }
+
+      // Disable the input field
+      inputField.disabled = true;
+      inputField.placeholder = "[System shutdown - refresh to reboot]";
+      
+      return;
+    }
 
     lists.forEach((ul) => {
       ul.style.display = "none"; // Hide all lists initially

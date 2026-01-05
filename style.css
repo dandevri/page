@@ -53,12 +53,13 @@ img {
 .bg-squares {
   background-color: #000;
   opacity: 1;
-  background-image: linear-gradient(#1f1f1f 0.6000000000000001px,
+  background-image: linear-gradient(#0e0e0e 0.6000000000000001px,
       transparent 0.6000000000000001px),
     linear-gradient(to right,
-      #1f1f1f 0.6000000000000001px,
+      #000000 0.6000000000000001px,
       #000 0.6000000000000001px);
   background-size: 5px 5px;
+  animation: crt-scroll 10s linear infinite;
 }
 
 .bg-lines {
@@ -177,7 +178,14 @@ footer ul li:first-of-type {
     opacity: 0.03;
   }
 }
-
+@keyframes crt-scroll {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 5px;
+  }
+}
 h1 span {
   opacity: 0;
 }
@@ -216,6 +224,19 @@ h1 span {
     /* transform: translateY(0); */
     filter: blur(0px);
   }
+}
+
+@keyframes blink {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
+}
+
+.blink {
+  animation: blink 1s infinite;
 }
 
 .booting .step {
@@ -411,11 +432,13 @@ footer div {
 }
 
 .rotate {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   animation: rotate 5s linear infinite;
-  transform-origin: center center;
-  text-align: center;
-  vertical-align: baseline;
+  vertical-align: middle;
+  width: 1ch;
+  height: 1em;
 }
 
 @keyframes rotate {
