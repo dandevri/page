@@ -262,6 +262,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const query = inputField.value.trim().toLowerCase();
     let matchFound = false; // Track if any match is found
 
+    console.log(query);
+
     lists.forEach((ul) => {
       ul.style.display = "none"; // Hide all lists initially
     });
