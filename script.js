@@ -68,9 +68,7 @@ number.reveal(2000);
 
 /* Splash screen baffle */
 
-let introOne = baffle(document.querySelector(".intro-one"), {
-  speed: 25,
-});
+// introOne is now handled in updateCommitVersion() to ensure commit hash is loaded first
 
 let introTwo = baffle(document.querySelector(".intro-two"), {
   speed: 25,
@@ -88,7 +86,7 @@ let introFive = baffle(document.querySelector(".intro-five"), {
   speed: 25,
 });
 
-introOne.reveal(1000, 500);
+// introOne.reveal(1000, 500); - handled in updateCommitVersion()
 introTwo.reveal(1000, 1000);
 introThree.reveal(1000, 1500);
 introFour.reveal(1000, 2000);
@@ -408,6 +406,79 @@ updateTime();
 // Set interval to update the time every second (1000ms)
 setInterval(updateTime, 1000);
 
+// Fetch latest commit hash from Codeberg
+async function updateCommitVersion() {
+  try {
+    const response = await fetch('https://codeberg.org/api/v1/repos/dandevri/page/commits?limit=1');
+    const commits = await response.json();
+    
+    if (commits && commits.length > 0) {
+      const shortHash = commits[0].sha.substring(0, 7);
+      const versionElements = document.querySelectorAll('.commit-version');
+      
+      versionElements.forEach(element => {
+        element.textContent = '#' + shortHash;
+      });
+      
+      // Calculate uptime since last commit
+      const commitDate = new Date(commits[0].commit.committer.date);
+      const now = new Date();
+      const diffMs = now - commitDate;
+      
+      const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
+      
+      let uptimeText = '';
+      if (days > 0) {
+        uptimeText = `${days} day${days !== 1 ? 's' : ''}, ${hours}:${minutes.toString().padStart(2, '0')}`;
+      } else if (hours > 0) {
+        uptimeText = `${hours}:${minutes.toString().padStart(2, '0')}`;
+      } else {
+        uptimeText = `${minutes} min`;
+      }
+      
+      const uptimeElement = document.querySelector('.commit-uptime');
+      if (uptimeElement) {
+        uptimeElement.textContent = uptimeText;
+      }
+      
+      // Re-run baffle on intro-one after updating commit hash
+      const introOne = document.querySelector(".intro-one");
+      if (introOne) {
+        let introBaffle = baffle(introOne, { speed: 25 });
+        introBaffle.reveal(1000, 500);
+      }
+    }
+  } catch (error) {
+    console.error('Failed to fetch commit hash:', error);
+    // Keep default version if fetch fails
+  }
+}
+
+// Call on page load, before other baffle effects
+updateCommitVersion();
+
+// Update human online/offline status
+function updateHumanStatus() {
+  const now = new Date();
+  const hours = now.getHours();
+  const statusElement = document.querySelector('.human-status');
+  
+  if (statusElement) {
+    if (hours >= 9 && hours < 17) {
+      statusElement.textContent = '● human online';
+    } else {
+      statusElement.textContent = '○ human offline';
+    }
+  }
+}
+
+// Update immediately and then every minute
+updateHumanStatus();
+setInterval(updateHumanStatus, 60000);
+
 // Live age counter
 function updateAge() {
   const birthdate = new Date('1997-07-06');
@@ -416,7 +487,7 @@ function updateAge() {
   
   const ageElement = document.querySelector('.age-counter');
   if (ageElement) {
-    ageElement.textContent = `(${unixTime.toLocaleString()} unix time years old)`;
+    ageElement.textContent = `(${unixTime.toLocaleString()} years old)`;
   }
 }
 
