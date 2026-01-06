@@ -16,7 +16,7 @@
   --color-primary: #000;
   --color-secondary: #fff;
   --space-s: 1em;
-  --space-m: 2em;
+  --space-m: 1em;
   --font: sans-serif;
   --grid-s: 1fr 1fr;
   --grid-m: 1fr 1fr 1fr;
@@ -122,10 +122,37 @@ footer ul {
   justify-content: space-between;
 }
 
+.globe {
+  display: inline-block;
+  margin-right: 5px;
+  margin-left: 5px;
+  vertical-align: text-bottom;
+  color: rgb(91, 91, 91);
+  margin-top: 1px;
+}
+
+.globe-lines {
+  animation: globe-spin 6s linear infinite;
+  transform-origin: 12px 12px;
+}
+
+.password-hidden {
+  cursor: pointer;
+}
+
+.password-hidden::after {
+  content: '▪▪▪▪▪▪▪▪▪';
+}
+
+.password-hidden:hover::after {
+  content: 'secretpass';
+}
+
 .booting {
   height: 98vh;
   overflow: hidden;
   position: absolute;
+  z-index: 1;
 }
 
 .text {
@@ -184,6 +211,15 @@ footer ul li:first-of-type {
   }
   100% {
     background-position: 0 5px;
+  }
+}
+
+@keyframes globe-spin {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
   }
 }
 h1 span {
@@ -350,15 +386,21 @@ input {
   height: 96%;
   outline: none;
   width: 100%;
+  caret-color: black;
+  caret-shape: block;
 }
 
-.intro span,
+
 .contact span,
 .biography span,
 .projects span,
 .version span {
-  max-width: 30vw;
+  max-width: 35vw;
   display: inline-block;
+}
+
+.intro span {
+  max-width: 35vw;
 }
 
 .intro {
@@ -465,4 +507,23 @@ figcaption {
 figure img {
   height: 20vh;
   object-fit: cover;
+}
+
+.box {
+  border: 1px solid var(--color-secondary);
+  padding: 1em;
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5em;
+  border-radius: 4px;
+}
+
+.computer-icon {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+}
+
+.intro-message {
+  flex: 1;
 }

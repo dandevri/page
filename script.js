@@ -199,7 +199,7 @@ function changeFavicon(src) {
 // Function to change the favicon when tab is not focussed
 const originalTitle = document.title;
 const originalFavicon = "/static/favicon.svg";
-const newTitle = "[vriOS disabled]";
+const newTitle = "[ vriOS disabled ]";
 const newFavicon = "/static/favicon_disabled.svg";
 
 document.addEventListener("visibilitychange", function () {
@@ -214,15 +214,17 @@ document.addEventListener("visibilitychange", function () {
 
 function start(target, name) {
   let bootFinished = false;
+  let activated = false;
   let booting = document.querySelector("footer li:nth-of-type(1) span");
 
   setTimeout(function () {
     bootFinished = true;
-  }, 9000);
+  }, 0);
 
   function activate() {
-    if (!bootFinished) return;
+    if (!bootFinished || activated) return;
 
+    activated = true;
     let element = document.querySelector(`${target}`);
     if (element) {
       element.classList.add(name);
@@ -405,3 +407,19 @@ updateTime();
 
 // Set interval to update the time every second (1000ms)
 setInterval(updateTime, 1000);
+
+// Live age counter
+function updateAge() {
+  const birthdate = new Date('1997-07-06');
+  const now = new Date();
+  const unixTime = Math.floor(now.getTime() / 1000);
+  
+  const ageElement = document.querySelector('.age-counter');
+  if (ageElement) {
+    ageElement.textContent = `(${unixTime.toLocaleString()} unix time years old)`;
+  }
+}
+
+// Update age immediately and then every 100ms for smooth animation
+updateAge();
+setInterval(updateAge, 100);

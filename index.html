@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>vriOS</title>
+    <title>[ vriOS ]</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="icon" href="/static/favicon.svg" type="image/svg+xml" />
     <script src="baffle.js" defer></script>
@@ -49,7 +49,7 @@
         <li>
           <span>-</span
           ><span class="step five"
-            >Password: ▪▪▪▪▪▪▪▪▪ -
+            >Password: <span class="password-hidden"></span> -
             <span class="intro-five">access granted</span></span
           >
         </li>
@@ -118,9 +118,10 @@
         _\///________\///__\///_____\/////__\////////////___________\///________\///________\///__\///////////__</code></li>
         <li><span>-</span></li>
         <li>
-          <span class="step"
-            >Hi visitor #<span class="visitor"></span>, I'm #AndyAI™ the virtual assistant of Danny. Let me know what info you need by selecting from the options below using commands, I'll provide you with the relevant information.</span></span
-          >
+          <span class="step box">
+            <img src="/static/computer.svg" alt="Computer icon" class="computer-icon">
+            <span class="intro-message">Hi visitor #<span class="visitor"></span>, I'm #AndyAI™ the virtual assistant of Danny. Let me know what info you need by selecting from the options below using commands, I'll provide you with the relevant information.</span>
+          </span>
         </li>
         <li><span>-</span></li>
         <li><span class="highlight show"
@@ -247,7 +248,7 @@
         </li>
         <li><span>-</span></li>
         <li><figure><figcaption>Fig 1. // [ profile_picture.jpg ]</figcaption><img class="profile" src="/static/avatar.jpg"></figure></li>
-        <li><span class="step">For over a decade, Danny de Vries has worked on non-award winning digital products and researched how humans use technology. Working at the intersection of Product Design (Visual), Web Development (Web/Code) and Human-Centered design (UX/UI). With a focus on emerging technologies, he develops innovative solutions to complex challenges.</span>
+        <li><span class="step">For over a decade, Danny de Vries <span class="age-counter"></span> has worked on non-award winning digital products and researched how humans use technology. Working at the intersection of Product Design (Visual), Web Development (Web/Code) and Human-Centered design (UX/UI). With a focus on emerging technologies, he develops innovative solutions to complex challenges.</span>
         </li>
         <li><span>-</span></li>
         <li><span class="step">His approach is systematic and organized, while embracing flexibility and adaptability. Expecting to be wrong, he views experimentation and refining iteratively as a key part of the learning proces creating things he has never made before and assessing their viability.</span>
@@ -512,7 +513,7 @@
           >
         </li>
         <li><span class="step"
-            >Host: localhost:5500</a></span
+            >Host: localhost:6767</a></span
           >
         </li>
         <li><span class="step"
@@ -714,7 +715,19 @@
       <footer>
         <ul>
           <div>
-            <li>vriOS <span class="system-status">[booting system...]</span> / </li>
+            <li>
+              <svg class="globe" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+                <g class="globe-lines">
+                  <path d="M12 2C12 2 8 6 8 12C8 18 12 22 12 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M12 2C12 2 16 6 16 12C16 18 12 22 12 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M2 12H22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M5 7H19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M5 17H19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </g>
+              </svg>
+              vriOS <span class="system-status">[booting system...]</span> / 
+            </li>
             <li> / [UTC+1] <span class="currenttime"></span></li>
           </div>
           <div>
