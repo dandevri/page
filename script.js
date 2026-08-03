@@ -1,14 +1,23 @@
 /* https://github.com/conorbailey90/pixelated-menu/blob/main/app.js */
 const pixelWrapper = document.querySelector(".pixelate");
-let pixels = [];
 
-function pixelate() {
+function buildPixelGrid() {
   pixelWrapper.innerHTML = "";
   let size = window.innerWidth < 1200 ? 10 : window.innerWidth < 4000 ? 20 : 50;
-  pixels = [];
 
   let pixelWidth = window.innerWidth / size;
   let height = window.innerHeight;
+  let pixelCount = 0;
+
+  for (let j = 0; j < height; j += pixelWidth) {
+    pixelCount += 1;
+  }
+
+  const totalPixels = size * pixelCount;
+  const order = Array.from({ length: totalPixels }, (_, index) => index).sort(
+    () => Math.random() - 0.5,
+  );
+  let currentOrderIndex = 0;
 
   for (let i = 0; i < size; i++) {
     let pixelColumn = document.createElement("div");
@@ -19,134 +28,14 @@ function pixelate() {
       let pixelDiv = document.createElement("div");
       pixelDiv.className = "pixel";
       pixelDiv.style.height = `${pixelWidth}px`;
-      pixels.push(pixelDiv);
+      pixelDiv.style.setProperty("--pixel-order", order[currentOrderIndex]);
+      currentOrderIndex += 1;
       pixelColumn.appendChild(pixelDiv);
-    }
-  }
-
-  for (let i = 0; i < pixels.length; i++) {
-    setTimeout(() => {
-      let random = Math.floor(Math.random() * pixels.length);
-      pixels[random].classList.add("active");
-      pixels.splice(random, 1);
-    }, i);
-
-    if (i === pixels.length - 1) {
-      setTimeout(() => {
-        pixels = [...document.querySelectorAll(".pixel")];
-      }, i + 10);
     }
   }
 }
 
-pixelate();
-
-/* Loading baffles */
-let headingTwos = baffle(document.querySelectorAll("h2"), {
-  speed: 75,
-});
-
-headingTwos.reveal(500);
-
-let headingThrees = baffle(document.querySelectorAll("h3"), {
-  speed: 75,
-});
-
-headingThrees.reveal(500);
-
-let background = baffle(document.querySelectorAll(".background"), {
-  speed: 75,
-});
-
-background.reveal(500);
-
-let number = baffle(document.querySelectorAll(".number"), {
-  speed: 75,
-});
-
-number.reveal(2000);
-
-/* Splash screen baffle */
-
-// introOne is now handled in updateCommitVersion() to ensure commit hash is loaded first
-
-let introTwo = baffle(document.querySelector(".intro-two"), {
-  speed: 25,
-});
-
-let introThree = baffle(document.querySelector(".intro-three"), {
-  speed: 25,
-});
-
-let introFour = baffle(document.querySelector(".intro-four"), {
-  speed: 25,
-});
-
-let introFive = baffle(document.querySelector(".intro-five"), {
-  speed: 25,
-});
-
-// introOne.reveal(1000, 500); - handled in updateCommitVersion()
-introTwo.reveal(1000, 1000);
-introThree.reveal(1000, 1500);
-introFour.reveal(1000, 2000);
-introFive.reveal(1000, 2500);
-
-let highlightOne = baffle(document.querySelector(".highlight-one"), {
-  speed: 25,
-});
-
-highlightOne.reveal(1000, 4000);
-
-let introSix = baffle(document.querySelector(".intro-six"), {
-  speed: 25,
-});
-
-let introSeven = baffle(document.querySelector(".intro-seven"), {
-  speed: 25,
-});
-
-let introEight = baffle(document.querySelector(".intro-eight"), {
-  speed: 25,
-});
-
-let introNine = baffle(document.querySelector(".intro-nine"), {
-  speed: 25,
-});
-
-introSix.reveal(1000, 5000);
-introSeven.reveal(1000, 5250);
-introEight.reveal(1000, 5500);
-introNine.reveal(1000, 5750);
-
-let highlightTwo = baffle(document.querySelector(".highlight-two"), {
-  speed: 25,
-});
-
-highlightTwo.reveal(1000, 6500);
-
-let logoOne = baffle(document.querySelector(".logo"), {
-  speed: 25,
-});
-
-logoOne.reveal(500, 100);
-
-let footerOne = baffle(
-  document.querySelector("footer li:nth-of-type(1) span"),
-  {
-    speed: 25,
-  }
-);
-
-let footerTwo = baffle(
-  document.querySelector("footer li:nth-of-type(2) span"),
-  {
-    speed: 25,
-  }
-);
-
-footerOne.reveal(250, 100);
-footerTwo.reveal(250, 100);
+buildPixelGrid();
 
 const now = new Date();
 
@@ -211,13 +100,8 @@ document.addEventListener("visibilitychange", function () {
 });
 
 function start(target, name) {
-  let bootFinished = false;
+  let bootFinished = true;
   let activated = false;
-  let booting = document.querySelector("footer li:nth-of-type(1) span");
-
-  setTimeout(function () {
-    bootFinished = true;
-  }, 0);
 
   function activate() {
     if (!bootFinished || activated) return;
@@ -226,15 +110,6 @@ function start(target, name) {
     let element = document.querySelector(`${target}`);
     if (element) {
       element.classList.add(name);
-      booting.textContent = "[system status ok]";
-
-      let footerThree = baffle(
-        document.querySelector("footer li:nth-of-type(1) span"),
-        {
-          speed: 25,
-        }
-      );
-      footerThree.reveal(250, 0);
     }
   }
 
@@ -249,13 +124,13 @@ function start(target, name) {
   document.addEventListener("touchstart", activate);
 }
 
-start(".search", "show");
+start(".search", "view");
 start(".booting", "hide");
 start(".intro", "show");
 
 document.addEventListener("DOMContentLoaded", function () {
   const inputField = document.getElementById("search");
-  const lists = document.querySelectorAll("ul[data-category]");
+  const panels = document.querySelectorAll("[data-category]");
   const intro = document.querySelector(".intro");
   let isShutdown = false; // Track shutdown state
 
@@ -272,36 +147,37 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log(query);
 
     // Check for quit commands
-    if (query === "q" || query === "-q" || query === "quit" || query === "--quit") {
+    if (
+      query === "q" ||
+      query === "-q" ||
+      query === "quit" ||
+      query === "--quit"
+    ) {
       isShutdown = true;
-      
-      // Hide all lists
-      lists.forEach((ul) => {
-        ul.style.display = "none";
+
+      // Hide all panels
+      panels.forEach((panel) => {
+        panel.style.display = "none";
       });
       intro.style.display = "none";
 
       // Show shutdown screen
-      const shutdownScreen = document.querySelector('ul[data-category="-q q quit --quit"]');
+      const shutdownScreen = document.querySelector(
+        '[data-category="-q q quit --quit"]',
+      );
       if (shutdownScreen) {
         shutdownScreen.style.display = "block";
-      }
-
-      // Update system status
-      const systemStatus = document.querySelector(".system-status");
-      if (systemStatus) {
-        systemStatus.textContent = "[system shutdown...]";
       }
 
       // Disable the input field
       inputField.disabled = true;
       inputField.placeholder = "[System shutdown - refresh to reboot]";
-      
+
       return;
     }
 
-    lists.forEach((ul) => {
-      ul.style.display = "none"; // Hide all lists initially
+    panels.forEach((panel) => {
+      panel.style.display = "none"; // Hide all panels initially
     });
 
     if (query === "") {
@@ -309,16 +185,12 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    lists.forEach((ul) => {
-      const categories = ul.dataset.category.split(" ");
+    panels.forEach((panel) => {
+      const categories = panel.dataset.category.split(" ");
 
-      if (
-        categories.includes(query) ||
-        categories.includes(`-${query}`) ||
-        categories.includes(`--${query}`)
-      ) {
-        ul.style.display = "block"; // Show the matching ul
-        matchFound = true; // A match was found
+      if (categories.includes(query)) {
+        panel.style.display = "block";
+        matchFound = true;
       }
     });
 
@@ -365,127 +237,63 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  function updateWindowResolution() {
-    const resolutionElement = document.querySelector(".resolution");
-    resolutionElement.textContent = `${window.innerWidth} x ${window.innerHeight}`;
-  }
-
-  updateWindowResolution();
-  window.addEventListener("resize", updateWindowResolution);
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  function getNavigator() {
-    const navigatorElement = document.querySelector(".navigator");
-    navigatorElement.textContent = `${navigator.platform}`;
-  }
-
-  getNavigator();
-});
-
-function updateTime() {
-  const currentTimeElement = document.querySelector(".currenttime");
-
-  // Get the current time
-  const now = new Date();
-  const hours = now.getHours().toString().padStart(2, "0");
-  const minutes = now.getMinutes().toString().padStart(2, "0");
-  const seconds = now.getSeconds().toString().padStart(2, "0");
-
-  // Format time as HH:MM:SS
-  const timeString = `${hours}:${minutes}:${seconds}`;
-
-  // Display the time inside the currenttime element
-  currentTimeElement.textContent = timeString;
-}
-
-// Call updateTime immediately to show the time instantly
-updateTime();
-
-// Set interval to update the time every second (1000ms)
-setInterval(updateTime, 1000);
-
 // Fetch latest commit hash from Codeberg
 async function updateCommitVersion() {
   try {
-    const response = await fetch('https://codeberg.org/api/v1/repos/dandevri/page/commits?limit=1');
+    const response = await fetch(
+      "https://codeberg.org/api/v1/repos/dandevri/page/commits?limit=1",
+    );
     const commits = await response.json();
-    
+
     if (commits && commits.length > 0) {
       const shortHash = commits[0].sha.substring(0, 7);
-      const versionElements = document.querySelectorAll('.commit-version');
-      
-      versionElements.forEach(element => {
-        element.textContent = '#' + shortHash;
+      const versionElements = document.querySelectorAll(".commit-version");
+
+      versionElements.forEach((element) => {
+        element.textContent = "#" + shortHash;
       });
-      
+
       // Calculate uptime since last commit
       const commitDate = new Date(commits[0].commit.committer.date);
       const now = new Date();
       const diffMs = now - commitDate;
-      
+
       const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const hours = Math.floor(
+        (diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+      );
       const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
-      
-      let uptimeText = '';
+
+      let uptimeText = "";
       if (days > 0) {
-        uptimeText = `${days} day${days !== 1 ? 's' : ''}, ${hours}:${minutes.toString().padStart(2, '0')}`;
+        uptimeText = `${days} day${days !== 1 ? "s" : ""}, ${hours}:${minutes.toString().padStart(2, "0")}`;
       } else if (hours > 0) {
-        uptimeText = `${hours}:${minutes.toString().padStart(2, '0')}`;
+        uptimeText = `${hours}:${minutes.toString().padStart(2, "0")}`;
       } else {
         uptimeText = `${minutes} min`;
       }
-      
-      const uptimeElement = document.querySelector('.commit-uptime');
+
+      const uptimeElement = document.querySelector(".commit-uptime");
       if (uptimeElement) {
         uptimeElement.textContent = uptimeText;
       }
-      
-      // Re-run baffle on intro-one after updating commit hash
-      const introOne = document.querySelector(".intro-one");
-      if (introOne) {
-        let introBaffle = baffle(introOne, { speed: 25 });
-        introBaffle.reveal(1000, 500);
-      }
     }
   } catch (error) {
-    console.error('Failed to fetch commit hash:', error);
+    console.error("Failed to fetch commit hash:", error);
     // Keep default version if fetch fails
   }
 }
 
-// Call on page load, before other baffle effects
 updateCommitVersion();
-
-// Update human online/offline status
-function updateHumanStatus() {
-  const now = new Date();
-  const hours = now.getHours();
-  const statusElement = document.querySelector('.human-status');
-  
-  if (statusElement) {
-    if (hours >= 9 && hours < 17) {
-      statusElement.textContent = '● human online';
-    } else {
-      statusElement.textContent = '○ human offline';
-    }
-  }
-}
-
-// Update immediately and then every minute
-updateHumanStatus();
-setInterval(updateHumanStatus, 60000);
 
 // Live age counter
 function updateAge() {
-  const birthdate = new Date('1997-07-06');
+  const birthdate = new Date("1997-07-06");
   const now = new Date();
   const unixTime = Math.floor(now.getTime() / 1000);
-  
-  const ageElement = document.querySelector('.age-counter');
+
+  const ageElement = document.querySelector(".age-counter");
   if (ageElement) {
     ageElement.textContent = `(${unixTime.toLocaleString()} years old)`;
   }
@@ -494,3 +302,35 @@ function updateAge() {
 // Update age immediately and then every 100ms for smooth animation
 updateAge();
 setInterval(updateAge, 100);
+
+/* Text appearing like LLM effect */
+document.querySelectorAll(".ai").forEach((el) => {
+  const text = el.textContent;
+  el.textContent = "";
+
+  let cumulativeDelay = 0;
+
+  text.split(/(\s+)/).forEach((part) => {
+    if (part.trim() === "") {
+      el.appendChild(document.createTextNode(part));
+    } else {
+      const span = document.createElement("span");
+      span.className = "word";
+      span.textContent = part;
+      span.style.animationDelay = `${cumulativeDelay}s`;
+      span.style.animationPlayState = "paused";
+      el.appendChild(span);
+
+      // Random gap between words: 30ms to 150ms, occasionally a longer pause
+      let gap = 0.03 + Math.random() * 0.12;
+      if (Math.random() < 0.1) gap += 0.15 + Math.random() * 0.2; // occasional pause
+      cumulativeDelay += gap;
+    }
+  });
+
+  setTimeout(() => {
+    el.querySelectorAll(".word").forEach((span) => {
+      span.style.animationPlayState = "running";
+    });
+  }, 3000);
+});
