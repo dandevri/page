@@ -99,7 +99,7 @@ document.addEventListener("visibilitychange", function () {
   }
 });
 
-function start(target, name) {
+function start(target, name, onActivate) {
   let bootFinished = true;
   let activated = false;
 
@@ -110,6 +110,9 @@ function start(target, name) {
     let element = document.querySelector(`${target}`);
     if (element) {
       element.classList.add(name);
+    }
+    if (typeof onActivate === "function") {
+      onActivate();
     }
   }
 
@@ -124,9 +127,16 @@ function start(target, name) {
   document.addEventListener("touchstart", activate);
 }
 
-start(".search", "view");
+start(".search", "view", () => {
+  // clicking/tapping the boot screen to dismiss it can steal focus away
+  // from the autofocused input, so restore it once the search bar shows
+  const input = document.getElementById("search");
+  if (input) {
+    input.focus();
+  }
+});
 start(".booting", "hide");
-start(".intro", "show");
+start(".intro", "show", playIntroSequence);
 
 document.addEventListener("DOMContentLoaded", function () {
   const inputField = document.getElementById("search");
@@ -287,24 +297,39 @@ async function updateCommitVersion() {
 
 updateCommitVersion();
 
-// Live age counter
+// Live "time since epoch" counter (epoch = birthdate)
 function updateAge() {
-  const birthdate = new Date("1997-07-06");
+  const epoch = new Date("1997-06-07T00:00:00");
   const now = new Date();
-  const unixTime = Math.floor(now.getTime() / 1000);
+  let diff = Math.floor((now.getTime() - epoch.getTime()) / 1000);
+
+  const days = Math.floor(diff / 86400);
+  diff -= days * 86400;
+  const hours = Math.floor(diff / 3600);
+  diff -= hours * 3600;
+  const minutes = Math.floor(diff / 60);
+  diff -= minutes * 60;
+  const seconds = diff;
+
+  const pad = (num, len) => String(num).padStart(len, "0");
 
   const ageElement = document.querySelector(".age-counter");
   if (ageElement) {
-    ageElement.textContent = `(${unixTime.toLocaleString()} years old)`;
+    ageElement.textContent = `(${pad(days, 5)}d:${pad(
+      hours,
+      2
+    )}h:${pad(minutes, 2)}m:${pad(seconds, 2)}s since epoch)`;
   }
 }
 
-// Update age immediately and then every 100ms for smooth animation
+// Update age immediately and then every second
 updateAge();
-setInterval(updateAge, 100);
+setInterval(updateAge, 1000);
 
 /* Text appearing like LLM effect */
-document.querySelectorAll(".ai").forEach((el) => {
+const aiElements = document.querySelectorAll(".ai");
+
+aiElements.forEach((el) => {
   const text = el.textContent;
   el.textContent = "";
 
@@ -327,10 +352,27 @@ document.querySelectorAll(".ai").forEach((el) => {
       cumulativeDelay += gap;
     }
   });
+});
+
+// Runs once the .intro section is revealed: shows a short "thinking"
+// placeholder in the assistant box, then swaps it for the AI reply
+// which generates in word-by-word.
+function playIntroSequence() {
+  const introSpinner = document.querySelector(".box.assistant .spinner");
 
   setTimeout(() => {
-    el.querySelectorAll(".word").forEach((span) => {
-      span.style.animationPlayState = "running";
+    if (introSpinner) {
+      introSpinner.classList.add("done");
+      // fully collapse the placeholder once its fade-out finishes
+      setTimeout(() => {
+        introSpinner.style.display = "none";
+      }, 250);
+    }
+
+    aiElements.forEach((el) => {
+      el.querySelectorAll(".word").forEach((span) => {
+        span.style.animationPlayState = "running";
+      });
     });
-  }, 3000);
-});
+  }, 2000);
+}
