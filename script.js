@@ -125,9 +125,22 @@ function start(target, name, onActivate) {
 
   document.addEventListener("click", activate);
   document.addEventListener("touchstart", activate);
+
+  return activate;
 }
 
-start(".search", "view", () => {
+// Only show the boot sequence on a visitor's first load, or again once
+// this timestamp is more than a day old.
+const BOOT_STORAGE_KEY = "vriosLastBoot";
+const BOOT_TTL_MS = 24 * 60 * 60 * 1000;
+
+function hasRecentBoot() {
+  const last = localStorage.getItem(BOOT_STORAGE_KEY);
+  if (!last) return false;
+  return Date.now() - Number(last) < BOOT_TTL_MS;
+}
+
+const activateSearch = start(".search", "view", () => {
   // clicking/tapping the boot screen to dismiss it can steal focus away
   // from the autofocused input, so restore it once the search bar shows
   const input = document.getElementById("search");
@@ -135,14 +148,60 @@ start(".search", "view", () => {
     input.focus();
   }
 });
-start(".booting", "hide");
-start(".intro", "show", playIntroSequence);
+const activateBooting = start(".booting", "hide", () => {
+  localStorage.setItem(BOOT_STORAGE_KEY, Date.now().toString());
+});
+const activateIntro = start(".intro", "show", playIntroSequence);
+
+if (hasRecentBoot()) {
+  activateSearch();
+  activateBooting();
+  activateIntro();
+}
+
+const LOADING_WORDS = [
+  "Wibbling Wrangling",
+  "Unfurling Unravelling",
+  "Swirling Swooping",
+  "Seasoning Shenaniganing",
+  "Processing Proofing",
+  "Orbiting Osmosing",
+  "Manifesting Meandering",
+  "Imagining Improvising",
+  "Hashing Hatching",
+  "Garnishing Generating",
+  "Fluttering Forming",
+  "Doodling Drizzling",
+  "Crunching Crystallizing",
+  "Boogieing Boondoggling",
+];
 
 document.addEventListener("DOMContentLoaded", function () {
   const inputField = document.getElementById("search");
-  const panels = document.querySelectorAll("[data-category]");
+  const panels = Array.from(document.querySelectorAll("[data-category]"));
   const intro = document.querySelector(".intro");
+  const loadingIndicator = document.querySelector(".loading-indicator");
+  const loadingText = document.querySelector(".loading-text");
   let isShutdown = false; // Track shutdown state
+  let revealTimeout = null;
+
+  // The intro's summary/options block plays its scanline reveal once,
+  // timed to the boot sequence. Freeze it in its finished state once done
+  // so returning to the intro later doesn't replay that wait.
+  const introGeneratedContent = document.querySelector(
+    ".intro .generated-content",
+  );
+  if (introGeneratedContent) {
+    introGeneratedContent.addEventListener("animationend", () => {
+      introGeneratedContent.style.animation = "none";
+      introGeneratedContent.style.clipPath = "none";
+    });
+  }
+
+  function showPanel(panel) {
+    loadingIndicator.style.display = "none";
+    panel.style.display = "block";
+  }
 
   inputField.addEventListener("input", function () {
     // Prevent input if shutdown has been triggered
@@ -152,9 +211,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const query = inputField.value.trim().toLowerCase();
-    let matchFound = false; // Track if any match is found
 
     console.log(query);
+
+    clearTimeout(revealTimeout);
+    loadingIndicator.style.display = "none";
 
     // Check for quit commands
     if (
@@ -195,17 +256,22 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    panels.forEach((panel) => {
-      const categories = panel.dataset.category.split(" ");
+    intro.style.display = "none";
 
-      if (categories.includes(query)) {
-        panel.style.display = "block";
-        matchFound = true;
-      }
-    });
+    const matchedPanel = panels.find((panel) =>
+      panel.dataset.category.split(" ").includes(query),
+    );
 
-    // Only hide .intro if a match was found
-    intro.style.display = matchFound ? "none" : "block";
+    if (!matchedPanel) {
+      intro.style.display = "block"; // No match, fall back to intro
+      return;
+    }
+
+    // Show a brief "generating" spinner, then wipe the matched section in
+    loadingText.textContent =
+      LOADING_WORDS[Math.floor(Math.random() * LOADING_WORDS.length)];
+    loadingIndicator.style.display = "block";
+    revealTimeout = setTimeout(() => showPanel(matchedPanel), 900);
   });
 });
 
@@ -216,15 +282,14 @@ visitorElement.textContent = randomNumber;
 function getRandomJobTitle() {
   const jobTitles = [
     "Software Engineer",
-    "Product Manager",
+    "Product Designer",
     "UX Designer",
     "Data Scientist",
-    "DevOps Engineer",
-    "Marketing Specialist",
-    "Cybersecurity Analyst",
     "AI Researcher",
-    "Technical Writer",
-    "Project Manager",
+    "Design Engineer",
+    "Experience Designer",
+    "Creative Technologist",
+    "Creative Engineer"
   ];
   return jobTitles[Math.floor(Math.random() * jobTitles.length)];
 }
@@ -240,9 +305,9 @@ function insertJobTitle() {
 
 // Add event listener to update job title on click
 document.addEventListener("DOMContentLoaded", () => {
-  const titleElement = document.querySelector(".designtitle");
-  if (titleElement) {
-    titleElement.addEventListener("click", insertJobTitle);
+  const toggleElement = document.querySelector(".designtitle-toggle");
+  if (toggleElement) {
+    toggleElement.addEventListener("click", insertJobTitle);
     insertJobTitle(); // Set initial job title
   }
 });
@@ -376,3 +441,38 @@ function playIntroSequence() {
     });
   }, 2000);
 }
+
+/* Options screen: radio-style selectable rows with a hover/focus preview */
+document.querySelectorAll(".options").forEach((group) => {
+  const buttons = Array.from(group.querySelectorAll(".option"));
+
+  function select(target) {
+    buttons.forEach((button) => {
+      const checked = button === target;
+      button.classList.toggle("active", checked);
+      button.setAttribute("aria-checked", checked ? "true" : "false");
+      button.querySelector(".option-check").textContent = checked
+        ? "[*]"
+        : "[ ]";
+    });
+  }
+
+  buttons.forEach((button) => {
+    const check = button.querySelector(".option-check");
+
+    button.addEventListener("click", () => select(button));
+
+    button.addEventListener("mouseenter", () => {
+      if (!button.classList.contains("active")) check.textContent = "[*]";
+    });
+    button.addEventListener("mouseleave", () => {
+      if (!button.classList.contains("active")) check.textContent = "[ ]";
+    });
+    button.addEventListener("focus", () => {
+      if (!button.classList.contains("active")) check.textContent = "[*]";
+    });
+    button.addEventListener("blur", () => {
+      if (!button.classList.contains("active")) check.textContent = "[ ]";
+    });
+  });
+});

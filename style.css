@@ -211,6 +211,7 @@ h1 {
     position: fixed;
     line-height: 0;
     bottom: 10vh;
+    z-index: -1;
 }
 
 @keyframes crt-scroll {
@@ -292,6 +293,19 @@ h1 span {
     overflow: hidden;
     clip-path: inset(0 0 100% 0);
     animation: reveal 500ms 7.7s ease-out forwards;
+}
+
+/* same scanline wipe, used to bring in a whole section right after
+   the loading indicator when switching between commands */
+.reveal-panel {
+    overflow: hidden;
+    clip-path: inset(0 0 100% 0);
+    animation: reveal 500ms ease-out forwards;
+}
+
+.loading-indicator {
+    display: none;
+    margin-left: var(--space-l);
 }
 
 @keyframes blink {
@@ -548,6 +562,61 @@ figcaption {
     max-width: 30vw;
 }
 
+.options {
+    display: flex;
+    flex-direction: column;
+    margin-left: var(--space-l);
+    max-width: 32em;
+}
+
+.option {
+    display: flex;
+    align-items: baseline;
+    width: 100%;
+    gap: 0.5em;
+    margin: 0;
+    padding: 0.15em 0.5em;
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.option-label {
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.option-fill {
+    flex: 1 1 auto;
+    align-self: center;
+    border-bottom: 1px dotted rgb(80, 80, 80);
+}
+
+.option-check {
+    white-space: nowrap;
+}
+
+.option:hover:not(.active) {
+    background: color-mix(in oklch, var(--term-fg) 15%, transparent);
+}
+
+.option:focus-visible {
+    outline: 1px dotted var(--term-fg);
+    outline-offset: -2px;
+}
+
+.option.active {
+    background: var(--term-fg);
+    color: var(--term-bg);
+}
+
+.option.active .option-fill {
+    border-bottom-color: transparent;
+}
+
 [data-category] {
     display: none;
 }
@@ -575,46 +644,11 @@ figcaption {
 .neofetch-info {
     display: flex;
     flex-direction: column;
+    margin: var(--space-l);
+}
+
+.neofetch-info .step {
     margin: 0;
-}
-
-.neofetch-info .step
-
-.neofetch-swatches {
-    display: flex;
-    gap: 4px;
-}
-
-.neofetch-swatches span {
-    display: inline-block;
-    width: 1.5em;
-    height: 1.5em;
-    background: var(--term-fg);
-}
-
-.neofetch-swatches span:nth-child(1) {
-    background: #e05252;
-}
-.neofetch-swatches span:nth-child(2) {
-    background: #52b788;
-}
-.neofetch-swatches span:nth-child(3) {
-    background: #d98e3f;
-}
-.neofetch-swatches span:nth-child(4) {
-    background: #4361ee;
-}
-.neofetch-swatches span:nth-child(5) {
-    background: #9b5de5;
-}
-.neofetch-swatches span:nth-child(6) {
-    background: #4cc9f0;
-}
-.neofetch-swatches span:nth-child(7) {
-    background: #f1faee;
-}
-.neofetch-swatches span:nth-child(8) {
-    background: #adb5bd;
 }
 
 a,
@@ -624,7 +658,7 @@ a:visited {
     text-decoration-style: dotted;
 }
 
-.designtitle {
+.designtitle-toggle {
     cursor: pointer;
     text-decoration: underline;
     text-decoration-style: dotted;
@@ -857,6 +891,15 @@ figure img {
     clip-path: inset(0 0 100% 0);
 }
 
+.asci-binary {
+    font-family: monospace;
+    white-space: pre-wrap;
+    word-break: break-all;
+    overflow-wrap: anywhere;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
 .llm-benchmark {
     font-family: monospace;
     font-size: 0.9em;
@@ -938,4 +981,8 @@ dl {
     grid-template-columns: 1fr 3.18fr;
     display: grid;
     gap: var(--space-s);
+}
+
+.stats .step {
+    margin: 0;
 }

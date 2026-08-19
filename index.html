@@ -96,54 +96,68 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
 
                 <p class="intro-spinner" aria-hidden="true"></p>
 
-                <h3 class="highlight show generated-content">
-                    [SUMMARY \<span class="rotate">*</span>]
-                </h3>
-                <p class="step generated-content">
-                    Danny de Vries is a
-                    <span class="designtitle"></span> [update ⟳] and spent over
-                    a decade developing applications that connect technology
-                    with society. He currently leads the venture-backed startup
-                    NovaTech Systems, Inc. (Nova AI).
-                </p>
+                <div class="generated-content">
+                    <h3 class="highlight show">
+                        [SUMMARY \<span class="rotate">*</span>]
+                    </h3>
+                    <p class="step">
+                        Danny de Vries is a
+                        <span class="designtitle-toggle">[<span class="designtitle"></span> ⟳]</span> creating non-award winning software and hardware. He works at the intersection of design, engineering, and interaction turning ideas into functional and well-designed products with attention to detail.
+                    </p>
+                    <p class="step">
+                        Currently, he is a senior lecturer teaching technical courses at <a href="https://cmd-amsterdam.nl/english/">CMD Amsterdam</a>. A bachelor-level design education in the field of interactive digital products and services at the <a href="https://www.amsterdamuas.com/">Amsterdam University of Applied Sciences</a>.
+                    </p>
 
-                <h3 class="highlight show generated-content">
-                    [OPTIONS \<span class="rotate">*</span>]
-                </h3>
-                <dl class="generated-content">
-                    <dt class="description">[^B], --biography</dt>
-                    <dd class="description-large">
-                        prints a full-text biography of human
-                    </dd>
+                    <h3 class="highlight show">
+                        [OPTIONS \<span class="rotate">*</span>]
+                    </h3>
+                    <dl>
+                        <dt class="description">[^B], --biography</dt>
+                        <dd class="description-large">
+                            prints a full-text biography of human
+                        </dd>
 
-                    <dt class="description">[^P], --projects</dt>
-                    <dd class="description-large">
-                        fetches real-time data on active projects
-                    </dd>
-                    <dt class="description">[^W], --writing</dt>
-                    <dd class="description-large">
-                        renders the latest thoughts and articles written
-                    </dd>
+                        <dt class="description">[^P], --projects</dt>
+                        <dd class="description-large">
+                            fetches real-time data on active projects
+                        </dd>
+
+                        <dt class="description">[^W], --writing</dt>
+                        <dd class="description-large">
+                            renders the latest thoughts and articles written
+                        </dd>
+
+                        <dt class="description">[^F], --favorites</dt>
+                        <dd class="description-large">
+                            displays his favorite movies, books, games
+                        </dd>
+
+
+                        <dt class="description">[^U], --uses</dt>
+                        <dd class="description-large">
+                           queries tools and software currently in use
+                        </dd>
+
+                        <dt class="description">[^M], --manifesto</dt>
+                        <dd class="description-large">
+                            lists principles he lives by
+                        </dd>
 
                     <dt class="description">[^C], --connect</dt>
                     <dd class="description-large">
-                        lists ways on how to contact reach out
+                        outputs ways on how to contact reach out
                     </dd>
-
-                    <dt class="description">[^U], --uses</dt>
-                    <dd class="description-large">
-                        lists tools and software currently in use
-                    </dd>
-
-                    <dt class="description">[^M], --manifesto</dt>
-                    <dd class="description-large">
-                        prints numbered principles lived by
-                    </dd>
-                </dl>
+                                    </dl>
+                </div>
             </section>
 
+            <p class="loading-indicator" aria-hidden="true">
+                <span class="spinner" aria-hidden="true"></span>
+                <span class="loading-text">Generating</span><span class="blink">...</span>
+            </p>
+
             <section
-                class="biography"
+                class="biography reveal-panel"
                 data-category="-b :b biography --biography"
             >
                 <h2 class="highlight show">
@@ -152,23 +166,21 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
                 <p class="step">
                     For over a decade, Danny de Vries
                     <span class="age-counter"></span> has worked on non-award
-                    winning digital products and researched how humans use
+                    winning digital and hardware related products mostly focussing on how humans interact with and use
                     technology. Working at the intersection of Product Design
-                    (Visual), Web Development (Web/Code) and Human-Centered
+                    (Visual), Creative Technology (Web/Code) and Human-Centered
                     design (UX/UI). With a focus on emerging technologies, he
-                    develops innovative solutions to complex challenges.
+                    develops innovative solutions to complex challenges for people and planet.
                 </p>
                 <p class="step">
-                    His approach is systematic and organized, while embracing
-                    flexibility and adaptability. Expecting to be wrong, he
-                    views experimentation and refining iteratively as a key part
-                    of the learning proces creating things he has never made
-                    before and assessing their viability.
+                    His approach is no bloat, no busywork and no bullshit. He's a builder that likes to strategically solve problems and critically review why he's doing things.
+                    He thinks experimentation, creating things he has never made
+                    before, and assessing their viability helps to create functional products. Less really is more, refining iteratively is a key part to creating well-designed products. Not by adding more, but when there is nothing left to take away.
                 </p>
+
                 <p class="step">
-                    Comfortable with programming languages (e.g. JavaScript,
-                    Arduino), design and computer graphics (e.g. Figma,
-                    Fusion360) and data processing (e.g. Jupyter, Processing).
+                    Comfortable doing user research (e.g. Interviews, Usability testing), developing using programming languages (e.g. Markup, JavaScript,
+                    Arduino), visual designing with computer graphics (e.g. Sketching, Figma), creating multimodal products (e.g. Fusion360, 3D printing) and interactive information systems (e.g. Jupyter, Processing). But in the end, tools are just tools. He learns and uses whatever that gets the job done.
                 </p>
                 <figure>
                     <figcaption>Fig 1. // [ profile_picture.jpg ]</figcaption>
@@ -179,20 +191,19 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
                     />
                 </figure>
                 <h3 class="highlight show">
-                    [Work experience\<span class="rotate">*</span>]
+                    [Experience\<span class="rotate">*</span>]
                 </h3>
                 <p class="step">
-                    Worked at agencies such as Fabrique and Qore digital
-                    switching between roles from visual designer, interaction
-                    designer and web developer, contributing to projects for
-                    high-profile clients (e.g. IKEA, Rijksmuseum) while
-                    simultaneously taking on freelance work for startups and
-                    SaaS companies.
+                    In the beginning he worked at several digital agencies such as strategic design firm <a href="https://www.fabrique.com/">Fabrique</a> and digital software company <a href="https://qore.digital/">Qore digital</a>
+                    doing everything from branding to coding contributing to projects for high-profile clients (e.g. IKEA, Rijksmuseum). On the side he continued to work as a freelancer taking on small side-projects such as interfaces and tools for friends who started SaaS companies or other digital services.
                 </p>
                 <p class="step">
-                    He coached and taught students from diverse backgrounds at
-                    Bit Academy, HackYourFuture and Ladies that UX, guiding them
-                    through the fundamentals of programming. Through hands-on
+                    After he had seen the good, the bad and the ugly of the 'agency life' he slowly gravitated towards education. He started lecturing web programming and design at CMD Amsterdam. A bachelor-level design education in the field of interactive digital products and services at the <a href="https://www.amsterdamuas.com/">Amsterdam University of Applied Sciences</a> which is currently his job.
+                    He is currently a senior lecturer and coordinates several technical courses focussing on web development, creative coding, data visualization and multimodal interaction design while also being a internship and graduation supervisor.
+                </p>
+                <p>
+                    He also part-time coached and taught students from diverse backgrounds at several other educational institutions such as
+                    the MBO Software Developer programme at the <a href="https://www.bit-academy.nl/">Bit Academy</a> and training refugees and displaced people for tech careers at <a href="https://hackyourfuture.net/">HackYourFuture</a>. Through hands-on
                     mentorship, he helped aspiring developers build their skills
                     and confidence, preparing them for careers in tech.
                 </p>
@@ -202,46 +213,37 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
                 <p class="step">
                     In 2024, he completed his MSc. in
                     <a
-                        href="https://www.uva.nl/shared-content/programmas/en/masters/information-studies-information-systems/information-systems.html"
-                        >Information Systems</a
-                    >
-                    (IS, Cum Laude) at the University of Amsterdam (UvA) where
+                        href="https://www.uva.nl/shared-content/programmas/en/masters/information-studies/information-studies.html"
+                        >Information Studies (Human Computer Interaction Track, Cum Laude</a
+                    > at the <a href="https://www.uva.nl/">University of Amsterdam (UvA)</a> where
                     he studied complex technical systems in a techno-social
-                    context. At the Digital Interactions Lab (DIL) he explored
-                    how people interact with emerging technologies.
+                    context. He wrote his thesis at the <a href="https://uva-dilab.com/">Digital Interactions Lab (DILAB)</a> a Human-Computer interaction research group where he explored
+                    how people can interact with 'smart buildings' using <a href="https://dataphys.org/wiki/"> data physicalizations (dataphys)</a> .
                 </p>
                 <p class="step">
-                    Prior to that, he completed his BSc. in Communication &amp;
-                    Multimedia Design (CMD) at the Amsterdam University of
-                    Applied Sciences (AUAS), a human-centered and
-                    context-sensitive design program specializing in interactive
-                    digital products and services.
+                    Prior to that, he completed his BSc. in <a href="https://cmd-amsterdam.nl/english/">Communication &amp;
+                    Multimedia Design (CMD)</a> at the Amsterdam University of
+                    Applied Sciences (AUAS), the affore mentioned bachelor program where he also currently teaches at.
                 </p>
+                <figure>
+                    <figcaption>Fig 1. // [ profile_picture.jpg ]</figcaption>
+                    <img
+                        class="profile"
+                        src="/static/avatar.jpg"
+                        alt="Profile picture"
+                    />
+                </figure>
                 <h3 class="highlight show">
                     [Hobbies\<span class="rotate">*</span>]
                 </h3>
                 <p class="step">
-                    Outside of work and time spend on personal projects he;
-                </p>
-                <p class="step">
-                    → Is an avid cook and likes to make nice dishes, brew good
-                    coffee and bake bread.
-                </p>
-                <p class="step">
-                    → Likes to tinker with hardware and sensors such as
-                    manufacturing with 3D printers, soldering etc.
-                </p>
-                <p class="step">
-                    → Cosplays as a sysadmin and getting into homelab by
-                    self-hosting and creating tools for everyday life.
-                </p>
-                <p class="step">
-                    → Is an avid racing lover visiting racing events regularly,
-                    occasional track day driver and amateur sim racer.
-                </p>
+                    Outside of work and time spend on personal projects he is an avid cook with a preference for asian cuisine and japanese kitchen tools. He's also a bit of a coffee snob and needs a qood quality cappucino to start his day.
+                    He likes to cosplay as a sysadmin by building is own homelab en host is own tools to improve his everyday life. He also tinkers a lot trying to create his own products understanding more and more of how they are manufactured and understanding materials. </p>
+                <p>He is also a car racing lover visiting racing events regularly, trying to lap go-kart tracks all over the world
+                driving his beloved Mazda MX5 ND and for hire cars on track days. At home he has a fancy sim-racing set-up where he competes in digital racing competitions with.</p>
             </section>
 
-            <section class="projects" data-category="-p :p projects --projects">
+            <section class="projects reveal-panel" data-category="-p :p projects --projects">
                 <p>
                     <span class="highlight show"
                         >[Projects\<span class="rotate">*</span>]</span
@@ -266,38 +268,50 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
                 </p>
             </section>
 
-            <section class="contact" data-category="-c :c contact --contact">
+            <section class="contact reveal-panel" data-category="-c :c contact --contact">
                 <p>
                     <span class="highlight show"
                         >[Contact\<span class="rotate">*</span>]</span
                     >
                 </p>
+
                 <p class="step">
-                    I’m always interested in exploring new opportunities,
-                    collaborating, or exchanging ideas with like-minded
-                    individuals. Feel free to email me if you'd like to see my
-                    portfolio deck or to discuss a potential project.
+                  For first contact please use good old fashioned e-mail to reach out to him. His e-mail is hosted by Proton Mail so zero-access/end-to-end encrypted by default.
                 </p>
-                <p class="list">
-                    <span>Availability:</span
-                    ><span>Available for projects</span>
-                </p>
-                <p class="list">
-                    <span>Mail:</span><span>hi[at]dandevri.es</span>
-                </p>
-                <p class="list">
-                    <span>Resume:</span><span>Download resume as .pdf</span>
-                </p>
+                <p class="list"><span>hi[at]dandevri.es</span><span></span></p>
                 <p class="step">
-                    Not really into the whole social media thing. However, there
-                    are some places around the web where you can find me where I
-                    would call myself modaretly active.
+                  Happy to help with almost anything. He reads and responds to almost anything. I love to hear from you if you want to:</p>
+                <p class="list">
+                    <span>Ask me for a public speaking engagements</span
+                    ><span>✓</span>
                 </p>
-                <p class="list"><span>LinkedIn</span><span>/dandevri</span></p>
-                <p class="list"><span>GitHub</span><span>/dandevri</span></p>
+                <p class="list">
+                    <span>Want to discuss a potential project</span
+                    ><span>✓</span>
+                </p>
+
+                <p class="step">
+                  E-mails with the following subjects will be happily ignored:</p>
+                <p class="list">
+                    <span>Marketing stuff</span
+                    ><span>❌</span>
+                </p>
+                <p class="list">
+                    <span>Recruiter stuff</span
+                    ><span>❌</span>
+                </p>
+
+
+                <p class="step">
+                    Quitting social media around 5 years ago was probably his best decision to date. Nada personal social media accounts on platforms from E-Corps.
+                <p>
+                    Spends most of his time in the busy <a href="https://geohack.toolforge.org/geohack.php?pagename=Amsterdam&params=52_22_22_N_04_53_37_E_region:NL_type:city(946447)">[52.372778, 4.893611]</a> for work but lives at the edge of the more quite city of <a href="https://geohack.toolforge.org/geohack.php?language=nl&params=52_037_0_N_4_045_0_E_type:city_scale:25000_region:NL&pagename=Alkmaar">[52.616667, 4.75]</a>. He is probably more introverted than most people think.
+                </p>
             </section>
 
-            <section class="uses" data-category="-u :u uses --uses">
+
+
+            <section class="uses reveal-panel" data-category="-u :u uses --uses">
                 <p>
                     <span class="highlight show"
                         >[Uses\<span class="rotate">*</span>]</span
@@ -339,7 +353,7 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
                 </p>
             </section>
 
-            <section class="manifesto" data-category="-m :m manifesto --manifesto">
+            <section class="manifesto reveal-panel" data-category="-m :m manifesto --manifesto">
                 <p>
                     <span class="highlight show"
                         >[Manifesto\<span class="rotate">*</span>]</span
@@ -406,7 +420,7 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
             </section>
 
             <section
-                class="version"
+                class="version reveal-panel"
                 data-category="-a :a attribution --attribution"
             >
                 <p>
@@ -481,6 +495,21 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
                     Aditionally you can view the changelog or full commit
                     history.
                 </p>
+                <p class="step">
+                    AndyAI currently uses the latest release of model
+                    &lsquo;Kalden&rsquo; 4.6 for it&rsquo;s thinking an
+                    reasoning consisting of 4 if else statements instead of 3
+                    from the previous model clearly becoming the frontier in
+                    LLM intelligence.
+                </p>
+                <p class="step">LLM Model Benchmark</p>
+                <pre
+                    class="llm-benchmark"
+                ><code>AndyAI          ████████████████████ 97
+Clouwde Ohpus   █████████░░░░░░░░░░░ 42
+Chet GeePeeTee  ████████░░░░░░░░░░░░ 37
+Koekle Djeminij ███████░░░░░░░░░░░░░ 34
+</code></pre>
                 <h3 class="subtitle">
                     [Design and tech philosophy\<span class="rotate">*</span>]
                 </h3>
@@ -544,83 +573,80 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
                 </p>
             </section>
 
-            <section class="stats" data-category="-v v version --version">
-                <p>
-                    <span class="highlight show"
-                        >[Stats\<span class="rotate">*</span>]</span
-                    >
-                </p>
-                <pre class="asci-os"><code>
-             _  ____   _____
-            (_)/ __ \ / ____|
- __   ___ __ _| |  | | (___
- \ \ / / '__| | |  | |\___ \
-  \ V /| |  | | |__| |____) |
-   \_/ |_|  |_|\____/|_____/
+            <section class="stats reveal-panel" data-category="-v v version --version">
+                <p class="step">[andy@deckard ~]# fetch</p>
+                <div class="neofetch">
+                    <pre class="asci-os"><code>
+░▒▓█▓▒░░▒▓█▓▒░
+░▒▓█▓▒░░▒▓█▓▒░
+ ░▒▓█▓▒▒▓█▓▒░
+ ░▒▓█▓▒▒▓█▓▒░
+  ░▒▓█▓▓█▓▒░
+  ░▒▓█▓▓█▓▒░
+   ░▒▓██▓▒░
 </code></pre>
-                <pre
-                    class="asci"
-                ><code>11100010 10000000 10011100 01010100 01101000 01100101 00100000 01000001 01101110 01110011 01110111 01100101 01110010 00100000 01110100 01101111 00100000 01110100 01101000 01100101 00100000 01000111 01110010 01100101 01100001 01110100 00100000 01010001 01110101 01100101 01110011 01110100 01101001 01101111 01101110 11100010 10000000 10100110 00001010 01001111 01100110 00100000 01001100 01101001 01100110 01100101 00101100 00100000 01110100 01101000 01100101 00100000 01010101 01101110 01101001 01110110 01100101 01110010 01110011 01100101 00100000 01100001 01101110 01100100 00100000 01000101 01110110 01100101 01110010 01111001 01110100 01101000 01101001 01101110 01100111 11100010 10000000 10100110 00001010 01001001 01110011 11100010 10000000 10100110 00001010 01000110 01101111 01110010 01110100 01111001 00101101 01110100 01110111 01101111 00101100 11100010 10000000 10011101 00100000 01110011 01100001 01101001 01100100 00100000 01000100 01100101 01100101 01110000 00100000 01010100 01101000 01101111 01110101 01100111 01101000 01110100 00101100 00100000 01110111 01101001 01110100 01101000 00100000 01101001 01101110 01100110 01101001 01101110 01101001 01110100 01100101 00100000 01101101 01100001 01101010 01100101 01110011 01110100 01111001 00101110
-</code></pre>
-                <p class="step">andy@deckard</p>
-                <p class="step">.........</p>
-                <p class="step">
-                    OS: vriOS version
-                    <a href="https://codeberg.org/dandevri/page" target="_blank"
-                        ><span class="commit-version">263-54</span></a
-                    >
-                </p>
-                <p class="step">
-                    Uptime:
-                    <span class="commit-uptime"
-                        >12 days, 44 minutes and 27 seconds.</span
-                    >
-                </p>
-                <p class="step">Host: localhost:6767</p>
-                <p class="step">Kernel: 07.06.1997</p>
-                <p class="step">CPU: Nexus-i3 @ 2.00GHZ</p>
-                <p class="step">GPU: Voight-Kampff Iris Graphics</p>
-                <p class="step">Memory: 563338MiB / 912912MiB</p>
-                <p class="step">.........</p>
-                <p class="step">
-                    Emissions:
-                    <a href="https://www.websitecarbon.com/website/dandevri-es/"
-                        >0.02g of C02</a
-                    >
-                    per website visit.
-                </p>
-                <p class="step">
-                    Storage:
-                    <a href="https://fitonafloppy.website/">fits on a floppy</a>
-                    with 128kb total.
-                </p>
-                <p class="step">
-                    Pagespeed:
-                    <a
-                        href="https://pagespeed.web.dev/analysis/https-www-dandevri-es/evkqs8o4b2?form_factor=mobile"
-                        >much fast much good practices.</a
-                    >
-                </p>
-                <p class="step">.........</p>
-                <p class="step">File system</p>
+                    <div class="neofetch-info">
+                        <p class="step">andy@deckard</p>
+                        <p class="step">
+                            OS: vriOS version
+                            <a
+                                href="https://codeberg.org/dandevri/page"
+                                target="_blank"
+                                ><span class="commit-version"
+                                    >263-54</span
+                                ></a
+                            >
+                        </p>
+                        <p class="step">
+                            Uptime:
+                            <span class="commit-uptime"
+                                >12 days, 44 minutes and 27 seconds.</span
+                            >
+                        </p>
+                        <p class="step">Host: localhost:6767</p>
+                        <p class="step">Kernel: 07.06.1997</p>
+                        <p class="step">CPU: Nexus-i3 @ 2.00GHZ</p>
+                        <p class="step">GPU: Voight-Kampff Iris Graphics</p>
+                        <p class="step">Memory: 563338MiB / 912912MiB</p>
+                        <p class="step">.........</p>
+                        <p class="step">
+                            Emissions:
+                            <a
+                                href="https://www.websitecarbon.com/website/dandevri-es/"
+                                >0.02g of C02</a
+                            >
+                            per website visit.
+                        </p>
+                        <p class="step">
+                            Storage:
+                            <a href="https://fitonafloppy.website/"
+                                >fits on a floppy</a
+                            >
+                            with 128kb total.
+                        </p>
+                        <p class="step">
+                            Pagespeed:
+                            <a
+                                href="https://pagespeed.web.dev/analysis/https-www-dandevri-es/evkqs8o4b2?form_factor=mobile"
+                                >much fast much good practices.</a
+                            >
+                        </p>
+                        <p class="step">.........</p>
+                    </div>
+                </div>
                 <p class="step">vriOS/</p>
                 <p class="step">├── fonts/</p>
                 <p class="step">├── static/</p>
                 <p class="step">├── index.html</p>
                 <p class="step">├── script.js</p>
                 <p class="step">└── style.css</p>
-                <p class="step">.........</p>
-                <p class="step">LLM Model Benchmark</p>
                 <pre
-                    class="llm-benchmark"
-                ><code>AndyAI          ████████████████████ 97
-Clouwde Ohpus   █████████░░░░░░░░░░░ 42
-Chet GeePeeTee  ████████░░░░░░░░░░░░ 37
-Koekle Djeminij ███████░░░░░░░░░░░░░ 34
+                    class="asci-binary"
+                ><code>00100010 01000110 01101111 01110010 01110100 01111001 00101101 01110100 01110111 01101111 00101100 00100010 00100000 01110011 01100001 01101001 01100100 00100000 01000100 01100101 01100101 01110000 00100000 01010100 01101000 01101111 01110101 01100111 01101000 01110100 00101100 00100000 01110111 01101001 01110100 01101000 00100000 01101001 01101110 01100110 01101001 01101110 01101001 01110100 01100101 00100000 01101101 01100001 01101010 01100101 01110011 01110100 01111001 00100000 01100001 01101110 01100100 00100000 01100011 01100001 01101100 01101101 00101110
 </code></pre>
             </section>
 
-            <section class="stats" data-category="-q q quit --quit">
+            <section class="stats reveal-panel" data-category="-q q quit --quit">
                 <p>
                     <span class="highlight show"
                         >[Shutting down\<span class="rotate">*</span>]</span
@@ -629,29 +655,86 @@ Koekle Djeminij ███████░░░░░░░░░░░░░ 34
                 <p class="step">Goodbye, thank you for visiting.</p>
             </section>
 
-            <section class="stats" data-category="-o o options --options">
+            <section class="stats reveal-panel" data-category="-o o options --options">
                 <p>
                     <span class="highlight show"
                         >[Options \<span class="rotate">*</span>]</span
                     >
                 </p>
+                <p class="step">
+                    Thank you for choosing vriOS as your main operating system. Please tailor your web experience by changing the system settings.
+                </p>
                 <h3 class="subtitle">[Themes\<span class="rotate">*</span>]</h3>
-                <p class="step">Arctic__________[y]</p>
-                <p class="step">Obsidian________[n]</p>
-                <p class="step">Matrix__________[n]</p>
-                <p class="step">Neon____________[n]</p>
-                <p class="step">System__________[n]</p>
+                <div class="options" role="radiogroup" aria-label="Themes">
+                    <button type="button" class="option active" role="radio" aria-checked="true">
+                        <span class="option-label">Arctic</span>
+                        <span class="option-fill" aria-hidden="true"></span>
+                        <span class="option-check">[*]</span>
+                    </button>
+                    <button type="button" class="option" role="radio" aria-checked="false">
+                        <span class="option-label">Obsidian</span>
+                        <span class="option-fill" aria-hidden="true"></span>
+                        <span class="option-check">[ ]</span>
+                    </button>
+                    <button type="button" class="option" role="radio" aria-checked="false">
+                        <span class="option-label">Matrix</span>
+                        <span class="option-fill" aria-hidden="true"></span>
+                        <span class="option-check">[ ]</span>
+                    </button>
+                    <button type="button" class="option" role="radio" aria-checked="false">
+                        <span class="option-label">Neon</span>
+                        <span class="option-fill" aria-hidden="true"></span>
+                        <span class="option-check">[ ]</span>
+                    </button>
+                    <button type="button" class="option" role="radio" aria-checked="false">
+                        <span class="option-label">System</span>
+                        <span class="option-fill" aria-hidden="true"></span>
+                        <span class="option-check">[ ]</span>
+                    </button>
+                </div>
                 <h3 class="subtitle">
                     [Background\<span class="rotate">*</span>]
                 </h3>
-                <p class="step">None (default) [y]</p>
-                <p class="step">Squares [n]</p>
-                <p class="step">Dots [n]</p>
-                <p class="step">Lines [n]</p>
+                <div class="options" role="radiogroup" aria-label="Background">
+                    <button type="button" class="option active" role="radio" aria-checked="true">
+                        <span class="option-label">None (default)</span>
+                        <span class="option-fill" aria-hidden="true"></span>
+                        <span class="option-check">[*]</span>
+                    </button>
+                    <button type="button" class="option" role="radio" aria-checked="false">
+                        <span class="option-label">Squares</span>
+                        <span class="option-fill" aria-hidden="true"></span>
+                        <span class="option-check">[ ]</span>
+                    </button>
+                    <button type="button" class="option" role="radio" aria-checked="false">
+                        <span class="option-label">Dots</span>
+                        <span class="option-fill" aria-hidden="true"></span>
+                        <span class="option-check">[ ]</span>
+                    </button>
+                    <button type="button" class="option" role="radio" aria-checked="false">
+                        <span class="option-label">Lines</span>
+                        <span class="option-fill" aria-hidden="true"></span>
+                        <span class="option-check">[ ]</span>
+                    </button>
+                </div>
                 <h3 class="subtitle">[Fonts\<span class="rotate">*</span>]</h3>
-                <p class="step">Departure Mono [y]</p>
-                <p class="step">Fira Code [n]</p>
-                <p class="step">Consolata [n]</p>
+                <div class="options" role="radiogroup" aria-label="Fonts">
+                    <button type="button" class="option active" role="radio" aria-checked="true">
+                        <span class="option-label">Departure Mono</span>
+                        <span class="option-fill" aria-hidden="true"></span>
+                        <span class="option-check">[*]</span>
+                    </button>
+                    <button type="button" class="option" role="radio" aria-checked="false">
+                        <span class="option-label">Fira Code</span>
+                        <span class="option-fill" aria-hidden="true"></span>
+                        <span class="option-check">[ ]</span>
+                    </button>
+                    <button type="button" class="option" role="radio" aria-checked="false">
+                        <span class="option-label">Consolata</span>
+                        <span class="option-fill" aria-hidden="true"></span>
+                        <span class="option-check">[ ]</span>
+                    </button>
+                </div>
             </section>
 
             <div class="search">
