@@ -555,6 +555,66 @@ figcaption {
 .asci-os {
     width: 15vw;
     margin-left: 2em;
+    line-height: 1.1;
+    letter-spacing: -1px;
+}
+
+.neofetch {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-m);
+}
+
+.neofetch .asci-os {
+    flex-shrink: 0;
+    width: auto;
+    margin: var(--space-l) 2em;
+    font-size: 1.4em;
+}
+
+.neofetch-info {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+.neofetch-info .step
+
+.neofetch-swatches {
+    display: flex;
+    gap: 4px;
+}
+
+.neofetch-swatches span {
+    display: inline-block;
+    width: 1.5em;
+    height: 1.5em;
+    background: var(--term-fg);
+}
+
+.neofetch-swatches span:nth-child(1) {
+    background: #e05252;
+}
+.neofetch-swatches span:nth-child(2) {
+    background: #52b788;
+}
+.neofetch-swatches span:nth-child(3) {
+    background: #d98e3f;
+}
+.neofetch-swatches span:nth-child(4) {
+    background: #4361ee;
+}
+.neofetch-swatches span:nth-child(5) {
+    background: #9b5de5;
+}
+.neofetch-swatches span:nth-child(6) {
+    background: #4cc9f0;
+}
+.neofetch-swatches span:nth-child(7) {
+    background: #f1faee;
+}
+.neofetch-swatches span:nth-child(8) {
+    background: #adb5bd;
 }
 
 a,
