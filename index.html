@@ -73,7 +73,7 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
                 </p>
             </section>
 
-            <section class="intro">
+            <div class="intro-shell">
                 <p class="step box assistant">
                     <svg
                         class="marching-ants-border"
@@ -83,7 +83,10 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
                     >
                         <rect x="1" y="1" width="98" height="98" />
                     </svg>
-                    <span class="spinner" aria-hidden="true"></span>
+                    <span class="assistant-status" aria-hidden="true">
+                        <span class="spinner" aria-hidden="true"></span>
+                        <span class="assistant-loading" aria-hidden="true"></span>
+                    </span>
 
                     <span class="intro-message ai"
                         >Hi visitor #<span class="visitor"></span>, I'm #AndyAI™
@@ -94,9 +97,8 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
                     >
                 </p>
 
-                <p class="intro-spinner" aria-hidden="true"></p>
-
-                <div class="generated-content">
+                <section class="intro">
+                    <div class="generated-content">
                     <h3 class="highlight show">
                         [SUMMARY \<span class="rotate">*</span>]
                     </h3>
@@ -149,16 +151,13 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
                     </dd>
                                     </dl>
                 </div>
-            </section>
-
-            <p class="loading-indicator" aria-hidden="true">
-                <span class="spinner" aria-hidden="true"></span>
-                <span class="loading-text">Generating</span><span class="blink">...</span>
-            </p>
+                </section>
+            </div>
 
             <section
                 class="biography reveal-panel"
                 data-category="-b :b biography --biography"
+                data-assistant-key="biography"
             >
                 <h2 class="highlight show">
                     [SUMMARY \<span class="rotate">*</span>]
@@ -243,7 +242,7 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
                 driving his beloved Mazda MX5 ND and for hire cars on track days. At home he has a fancy sim-racing set-up where he competes in digital racing competitions with.</p>
             </section>
 
-            <section class="projects reveal-panel" data-category="-p :p projects --projects">
+            <section class="projects reveal-panel" data-category="-p :p projects --projects" data-assistant-key="projects">
                 <p>
                     <span class="highlight show"
                         >[Projects\<span class="rotate">*</span>]</span
@@ -268,7 +267,7 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
                 </p>
             </section>
 
-            <section class="contact reveal-panel" data-category="-c :c contact --contact">
+            <section class="contact reveal-panel" data-category="-c :c contact --contact" data-assistant-key="contact">
                 <p>
                     <span class="highlight show"
                         >[Contact\<span class="rotate">*</span>]</span
@@ -311,7 +310,7 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
 
 
 
-            <section class="uses reveal-panel" data-category="-u :u uses --uses">
+            <section class="uses reveal-panel" data-category="-u :u uses --uses" data-assistant-key="uses">
                 <p>
                     <span class="highlight show"
                         >[Uses\<span class="rotate">*</span>]</span
@@ -353,7 +352,7 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
                 </p>
             </section>
 
-            <section class="manifesto reveal-panel" data-category="-m :m manifesto --manifesto">
+            <section class="manifesto reveal-panel" data-category="-m :m manifesto --manifesto" data-assistant-key="manifesto">
                 <p>
                     <span class="highlight show"
                         >[Manifesto\<span class="rotate">*</span>]</span
@@ -422,6 +421,7 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
             <section
                 class="version reveal-panel"
                 data-category="-a :a attribution --attribution"
+                data-assistant-key="attribution"
             >
                 <p>
                     <span class="highlight show"
@@ -573,7 +573,7 @@ Koekle Djeminij ███████░░░░░░░░░░░░░ 34
                 </p>
             </section>
 
-            <section class="stats reveal-panel" data-category="-v v version --version">
+            <section class="stats reveal-panel" data-category="-v v version --version" data-assistant-key="version">
                 <p class="step">[andy@deckard ~]# fetch</p>
                 <div class="neofetch">
                     <pre class="asci-os"><code>
@@ -655,7 +655,7 @@ Koekle Djeminij ███████░░░░░░░░░░░░░ 34
                 <p class="step">Goodbye, thank you for visiting.</p>
             </section>
 
-            <section class="stats reveal-panel" data-category="-o o options --options">
+            <section class="stats reveal-panel" data-category="-o o options --options" data-assistant-key="options">
                 <p>
                     <span class="highlight show"
                         >[Options \<span class="rotate">*</span>]</span
@@ -736,6 +736,15 @@ Koekle Djeminij ███████░░░░░░░░░░░░░ 34
                     </button>
                 </div>
             </section>
+
+            <p class="command-bar" aria-hidden="true">
+                <span class="command-chip">[^H] home</span>
+                <span class="command-chip">[^B] biography</span>
+                <span class="command-chip">[^P] projects</span>
+                <span class="command-chip">[^U] uses</span>
+                <span class="command-chip">[^M] manifesto</span>
+                <span class="command-chip">[^C] contact</span>
+            </p>
 
             <div class="search">
                 <label> &gt; </label>

@@ -99,6 +99,34 @@ document.addEventListener("visibilitychange", function () {
   }
 });
 
+// Silly placeholders shown in the assistant box while it's "thinking",
+// before the actual message for the section starts typing out. Declared
+// here (rather than near where it's used) so it's available before
+// playIntroSequence can run - which happens synchronously below for
+// returning visitors, ahead of the rest of the script.
+const LOADING_WORDS = [
+  "Wibbling Wrangling",
+  "Unfurling Unravelling",
+  "Swirling Swooping",
+  "Seasoning Shenaniganing",
+  "Processing Proofing",
+  "Orbiting Osmosing",
+  "Manifesting Meandering",
+  "Imagining Improvising",
+  "Hashing Hatching",
+  "Garnishing Generating",
+  "Fluttering Forming",
+  "Doodling Drizzling",
+  "Crunching Crystallizing",
+  "Boogieing Boondoggling",
+];
+
+// Bumped every time the assistant box starts narrating a (possibly new)
+// section, so a stale, already-pending timer (e.g. the boot sequence's)
+// can tell it's no longer the current one and bail instead of clobbering
+// whatever the assistant box is now showing.
+let assistantGeneration = 0;
+
 function start(target, name, onActivate) {
   let bootFinished = true;
   let activated = false;
@@ -151,7 +179,7 @@ const activateSearch = start(".search", "view", () => {
 const activateBooting = start(".booting", "hide", () => {
   localStorage.setItem(BOOT_STORAGE_KEY, Date.now().toString());
 });
-const activateIntro = start(".intro", "show", playIntroSequence);
+const activateIntro = start(".intro-shell", "show", playIntroSequence);
 
 if (hasRecentBoot()) {
   activateSearch();
@@ -159,29 +187,126 @@ if (hasRecentBoot()) {
   activateIntro();
 }
 
-const LOADING_WORDS = [
-  "Wibbling Wrangling",
-  "Unfurling Unravelling",
-  "Swirling Swooping",
-  "Seasoning Shenaniganing",
-  "Processing Proofing",
-  "Orbiting Osmosing",
-  "Manifesting Meandering",
-  "Imagining Improvising",
-  "Hashing Hatching",
-  "Garnishing Generating",
-  "Fluttering Forming",
-  "Doodling Drizzling",
-  "Crunching Crystallizing",
-  "Boogieing Boondoggling",
-];
+// What the assistant box narrates while "generating" each section. Written
+// like AndyAI is actually talking to you, in two sentences or so. The
+// highlighted segment echoes the command that was just sent.
+const SECTION_MESSAGES = {
+  home: [
+    "Alright, heading back to the ",
+    { text: "[summary]", highlight: true },
+    " page for you. Here's a recap of who Danny is and what you can ask me next.",
+  ],
+  biography: [
+    "Sure thing, let me pull up the full ",
+    { text: "[biography]", highlight: true },
+    " on Danny de Vries for you. This one covers his entire career, education and a bit of his personal life too.",
+  ],
+  projects: [
+    "Give me a second while I fetch the latest ",
+    { text: "[projects]", highlight: true },
+    " Danny has been working on. I'll show you what's active right now, plus what's sitting in the archive.",
+  ],
+  contact: [
+    "Happy to help you get in touch, generating the best ways to ",
+    { text: "[contact]", highlight: true },
+    " Danny right now. He reads everything himself, so don't be shy.",
+  ],
+  uses: [
+    "Let me put together the full list of things Danny ",
+    { text: "[uses]", highlight: true },
+    " — the hardware, software and tools he relies on daily. This gets updated every time something in his setup changes.",
+  ],
+  manifesto: [
+    "One moment, compiling Danny's ",
+    { text: "[manifesto]", highlight: true },
+    " for you. It's the running list of principles that shape how he designs, builds and works.",
+  ],
+  attribution: [
+    "Pulling up the ",
+    { text: "[attribution]", highlight: true },
+    " page now, crediting everyone whose work inspired this site. There's also a peek at the tech and philosophy behind it.",
+  ],
+  version: [
+    "Fetching the system ",
+    { text: "[version]", highlight: true },
+    " info you asked for. Give me a moment to gather the specs and uptime details.",
+  ],
+  options: [
+    "Opening up the ",
+    { text: "[options]", highlight: true },
+    " menu so you can tailor your experience. Feel free to switch up the theme, background or font to your liking.",
+  ],
+};
+
+// How long a single word's own reveal animation takes (matches the
+// `word-in` keyframes' duration in style.css).
+const WORD_ANIMATION_MS = 200;
+
+// Splits an array of text/highlight segments into paused per-word spans on
+// `el`, the same word-in effect used for the assistant's initial greeting.
+// Returns the delay (in seconds) of the last word, so callers can tell when
+// the full message will have finished typing out.
+function renderAssistantWords(el, segments) {
+  el.textContent = "";
+  let cumulativeDelay = 0;
+
+  segments.forEach((segment) => {
+    const isHighlight = typeof segment !== "string" && segment.highlight;
+    const text = typeof segment === "string" ? segment : segment.text;
+
+    text.split(/(\s+)/).forEach((part) => {
+      if (part === "") return;
+      if (/^\s+$/.test(part)) {
+        el.appendChild(document.createTextNode(part));
+        return;
+      }
+
+      const word = document.createElement("span");
+      word.className = "word";
+      word.style.animationDelay = `${cumulativeDelay}s`;
+      word.style.animationPlayState = "paused";
+
+      if (isHighlight) {
+        const mark = document.createElement("span");
+        mark.className = "term-highlight";
+        mark.textContent = part;
+        word.appendChild(mark);
+      } else {
+        word.textContent = part;
+      }
+
+      el.appendChild(word);
+
+      // Random gap between words: 15ms to 75ms, occasionally a longer pause
+      let gap = 0.015 + Math.random() * 0.06;
+      if (Math.random() < 0.1) gap += 0.075 + Math.random() * 0.1;
+      cumulativeDelay += gap;
+    });
+  });
+
+  return cumulativeDelay;
+}
+
+function playAssistantWords(el) {
+  el.querySelectorAll(".word").forEach((span) => {
+    span.style.animationPlayState = "running";
+  });
+}
 
 document.addEventListener("DOMContentLoaded", function () {
   const inputField = document.getElementById("search");
   const panels = Array.from(document.querySelectorAll("[data-category]"));
   const intro = document.querySelector(".intro");
-  const loadingIndicator = document.querySelector(".loading-indicator");
-  const loadingText = document.querySelector(".loading-text");
+  const introShell = document.querySelector(".intro-shell");
+  const commandBar = document.querySelector(".command-bar");
+  const assistantStatus = document.querySelector(".box.assistant .assistant-status");
+  const assistantSpinner = document.querySelector(".box.assistant .spinner");
+  const assistantLoading = document.querySelector(
+    ".box.assistant .assistant-loading",
+  );
+  const assistantMessage = document.querySelector(
+    ".box.assistant .intro-message",
+  );
   let isShutdown = false; // Track shutdown state
   let revealTimeout = null;
 
@@ -198,24 +323,94 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  function showPanel(panel) {
-    loadingIndicator.style.display = "none";
-    panel.style.display = "block";
+  function setCommandBarVisible(visible) {
+    if (commandBar) {
+      commandBar.classList.toggle("show", visible);
+    }
   }
 
-  inputField.addEventListener("input", function () {
-    // Prevent input if shutdown has been triggered
+  // Runs the assistant box through its "thinking" spinner (with a silly
+  // placeholder word), then types out a message naming the section being
+  // generated, and only reveals that section once the typing has finished.
+  function generateSection(key, revealContent) {
+    assistantGeneration += 1;
+    const myGeneration = assistantGeneration;
+
+    if (assistantStatus) {
+      assistantStatus.classList.add("active");
+    }
+    if (assistantSpinner) {
+      assistantSpinner.classList.remove("done");
+    }
+    if (assistantLoading) {
+      assistantLoading.textContent =
+        LOADING_WORDS[Math.floor(Math.random() * LOADING_WORDS.length)] +
+        "...";
+    }
+    if (assistantMessage) {
+      assistantMessage.textContent = "";
+    }
+
+    revealTimeout = setTimeout(() => {
+      if (assistantGeneration !== myGeneration) return;
+
+      if (assistantSpinner) {
+        assistantSpinner.classList.add("done");
+        setTimeout(() => {
+          if (assistantGeneration !== myGeneration) return;
+          if (assistantStatus) assistantStatus.classList.remove("active");
+        }, 250);
+      }
+      if (assistantLoading) {
+        assistantLoading.textContent = "";
+      }
+
+      const segments = SECTION_MESSAGES[key];
+      let typingSeconds = 0;
+      if (segments && assistantMessage) {
+        typingSeconds = renderAssistantWords(assistantMessage, segments);
+        requestAnimationFrame(() => {
+          if (assistantGeneration === myGeneration) playAssistantWords(assistantMessage);
+        });
+      }
+
+      revealTimeout = setTimeout(() => {
+        if (assistantGeneration !== myGeneration) return;
+        revealContent();
+      }, typingSeconds * 1000 + WORD_ANIMATION_MS);
+    }, 900);
+  }
+
+  // Returning to the homepage after visiting another section should feel
+  // the same as generating any other section. The very first appearance of
+  // the intro (during boot) keeps its own slower, choreographed reveal, tied
+  // to a fixed 7.7s delay - if the animation hasn't naturally finished (and
+  // its animationend listener frozen it) by the time we get here, force it
+  // into its final state so the summary never waits out that stale delay.
+  function showHome() {
+    setCommandBarVisible(false);
+    generateSection("home", () => {
+      if (introGeneratedContent) {
+        introGeneratedContent.style.animation = "none";
+        introGeneratedContent.style.clipPath = "none";
+      }
+      intro.classList.add("reveal-panel");
+      intro.style.display = "block";
+    });
+  }
+
+  // Reads whatever is currently in the input, "sends" it, then clears the
+  // prompt - triggered by hitting Enter.
+  function submitCommand() {
     if (isShutdown) {
       inputField.value = "";
       return;
     }
 
     const query = inputField.value.trim().toLowerCase();
-
-    console.log(query);
+    inputField.value = "";
 
     clearTimeout(revealTimeout);
-    loadingIndicator.style.display = "none";
 
     // Check for quit commands
     if (
@@ -231,6 +426,8 @@ document.addEventListener("DOMContentLoaded", function () {
         panel.style.display = "none";
       });
       intro.style.display = "none";
+      introShell.style.display = "none";
+      setCommandBarVisible(false);
 
       // Show shutdown screen
       const shutdownScreen = document.querySelector(
@@ -252,7 +449,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     if (query === "") {
-      intro.style.display = "block"; // Show intro if input is empty
+      showHome(); // Show intro if input is empty
       return;
     }
 
@@ -263,15 +460,20 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
     if (!matchedPanel) {
-      intro.style.display = "block"; // No match, fall back to intro
+      showHome(); // No match, fall back to intro
       return;
     }
 
-    // Show a brief "generating" spinner, then wipe the matched section in
-    loadingText.textContent =
-      LOADING_WORDS[Math.floor(Math.random() * LOADING_WORDS.length)];
-    loadingIndicator.style.display = "block";
-    revealTimeout = setTimeout(() => showPanel(matchedPanel), 900);
+    setCommandBarVisible(true);
+    generateSection(matchedPanel.dataset.assistantKey, () => {
+      matchedPanel.style.display = "block";
+    });
+  }
+
+  inputField.addEventListener("keydown", function (event) {
+    if (event.key !== "Enter") return;
+    event.preventDefault();
+    submitCommand();
   });
 });
 
@@ -411,9 +613,9 @@ aiElements.forEach((el) => {
       span.style.animationPlayState = "paused";
       el.appendChild(span);
 
-      // Random gap between words: 30ms to 150ms, occasionally a longer pause
-      let gap = 0.03 + Math.random() * 0.12;
-      if (Math.random() < 0.1) gap += 0.15 + Math.random() * 0.2; // occasional pause
+      // Random gap between words: 15ms to 75ms, occasionally a longer pause
+      let gap = 0.015 + Math.random() * 0.06;
+      if (Math.random() < 0.1) gap += 0.075 + Math.random() * 0.1; // occasional pause
       cumulativeDelay += gap;
     }
   });
@@ -423,15 +625,34 @@ aiElements.forEach((el) => {
 // placeholder in the assistant box, then swaps it for the AI reply
 // which generates in word-by-word.
 function playIntroSequence() {
+  const myGeneration = assistantGeneration;
+  const introStatus = document.querySelector(".box.assistant .assistant-status");
   const introSpinner = document.querySelector(".box.assistant .spinner");
+  const introLoading = document.querySelector(".box.assistant .assistant-loading");
+
+  if (introStatus) {
+    introStatus.classList.add("active");
+  }
+  if (introLoading) {
+    introLoading.textContent =
+      LOADING_WORDS[Math.floor(Math.random() * LOADING_WORDS.length)] + "...";
+  }
 
   setTimeout(() => {
+    // If the user has already navigated to a section, the assistant box is
+    // busy narrating that instead - don't clobber it with the stale greeting.
+    if (assistantGeneration !== myGeneration) return;
+
     if (introSpinner) {
       introSpinner.classList.add("done");
       // fully collapse the placeholder once its fade-out finishes
       setTimeout(() => {
-        introSpinner.style.display = "none";
+        if (assistantGeneration !== myGeneration) return;
+        if (introStatus) introStatus.classList.remove("active");
       }, 250);
+    }
+    if (introLoading) {
+      introLoading.textContent = "";
     }
 
     aiElements.forEach((el) => {

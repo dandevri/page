@@ -270,23 +270,6 @@ h1 span {
     }
 }
 
-/* small "thinking" indicator shown while the assistant reply is
-   still being generated, before the rest of the intro content appears */
-.intro-spinner {
-    opacity: 0;
-    animation:
-        fade 200ms 6s ease forwards,
-        fade-out 200ms 7.5s ease forwards;
-}
-
-.intro-spinner::before {
-    display: inline-block;
-    width: 1.4ch;
-    text-align: center;
-    content: "·";
-    animation: cycle 4s steps(1) infinite 6s;
-}
-
 /* reveals once the assistant message has finished "generating",
    using the same CRT scanline wipe as the booting AndyAI ascii art */
 .generated-content {
@@ -295,17 +278,48 @@ h1 span {
     animation: reveal 500ms 7.7s ease-out forwards;
 }
 
+.generated-content > :first-child {
+    margin-top: 0;
+}
+
 /* same scanline wipe, used to bring in a whole section right after
-   the loading indicator when switching between commands */
+   the assistant box finishes narrating what it's generating */
 .reveal-panel {
     overflow: hidden;
     clip-path: inset(0 0 100% 0);
     animation: reveal 500ms ease-out forwards;
 }
 
-.loading-indicator {
+.term-highlight {
+    background: var(--term-fg);
+    color: var(--term-bg);
+    padding: 0 0.2ch;
+}
+
+.command-bar {
     display: none;
-    margin-left: var(--space-l);
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5em 1.5em;
+    position: fixed;
+    bottom: 3.56vh;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0.4em 2em;
+    background: var(--term-bg);
+    color: var(--term-fg);
+    border-top: 1px dotted var(--term-fg);
+    box-sizing: border-box;
+}
+
+.command-bar.show {
+    display: flex;
+}
+
+.command-chip {
+    font: inherit;
+    color: inherit;
 }
 
 @keyframes blink {
@@ -534,9 +548,24 @@ figcaption {
     max-width: none;
 }
 
-.intro {
+.intro-shell {
+    margin: var(--space-l) var(--space-l) 1em var(--space-l);
+    max-width: 80ch;
     opacity: 0;
     display: none;
+}
+
+.intro-shell .intro {
+    margin: 0;
+    max-width: none;
+}
+
+.intro-shell .intro > :first-child {
+    margin-top: 0;
+}
+
+.box.assistant {
+    margin: 0 0 1em 0;
 }
 
 .show {
@@ -715,7 +744,12 @@ figure img {
 }
 
 .intro-message {
+    display: block;
     flex: 1;
+}
+
+.assistant-status.active + .intro-message {
+    margin-top: 0.5em;
 }
 
 .intro-logo {
@@ -790,6 +824,18 @@ figure img {
 
 .spinner.done {
     opacity: 0;
+}
+
+.assistant-status {
+    display: none;
+}
+
+.assistant-status.active {
+    display: inline-block;
+}
+
+.assistant-loading {
+    margin-left: 0.3em;
 }
 
 .spinner::before {
@@ -967,7 +1013,7 @@ svg {
     display: inline-block;
     opacity: 0;
     transform: translateY(4px);
-    animation: word-in 0.4s ease-out forwards;
+    animation: word-in 0.2s ease-out forwards;
 }
 
 @keyframes word-in {
