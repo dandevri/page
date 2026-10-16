@@ -75,14 +75,6 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
 
             <div class="intro-shell">
                 <p class="step box assistant">
-                    <svg
-                        class="marching-ants-border"
-                        viewBox="0 0 100 100"
-                        preserveAspectRatio="none"
-                        aria-hidden="true"
-                    >
-                        <rect x="1" y="1" width="98" height="98" />
-                    </svg>
                     <span class="assistant-status" aria-hidden="true">
                         <span class="spinner" aria-hidden="true"></span>
                         <span class="assistant-loading" aria-hidden="true"></span>
@@ -95,13 +87,15 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
                         commands, I'll provide you with the relevant
                         information.</span
                     >
+                    <span class="assistant-meta"
+                        ><span class="agent-mark">■</span> AndyAI · kalden-4.6</span
+                    >
                 </p>
 
                 <section class="intro">
                     <div class="generated-content">
-                    <h3 class="highlight show">
-                        [SUMMARY \<span class="rotate">*</span>]
-                    </h3>
+                    <div class="panel">
+                    <h3 class="panel-title"># Summary</h3>
                     <p class="step">
                         Danny de Vries is a
                         <span class="designtitle-toggle">[<span class="designtitle"></span> ⟳]</span> creating non-award winning software and hardware. He works at the intersection of design, engineering, and interaction turning ideas into functional and well-designed products with attention to detail.
@@ -109,10 +103,10 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
                     <p class="step">
                         Currently, he is a senior lecturer teaching technical courses at <a href="https://cmd-amsterdam.nl/english/">CMD Amsterdam</a>. A bachelor-level design education in the field of interactive digital products and services at the <a href="https://www.amsterdamuas.com/">Amsterdam University of Applied Sciences</a>.
                     </p>
+                    </div>
 
-                    <h3 class="highlight show">
-                        [OPTIONS \<span class="rotate">*</span>]
-                    </h3>
+                    <div class="panel">
+                    <h3 class="panel-title"># Options</h3>
                     <dl>
                         <dt class="description">[^B], --biography</dt>
                         <dd class="description-large">
@@ -150,6 +144,7 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
                         outputs ways on how to contact reach out
                     </dd>
                                     </dl>
+                    </div>
                 </div>
                 </section>
             </div>
@@ -737,24 +732,72 @@ Koekle Djeminij ███████░░░░░░░░░░░░░ 34
                 </div>
             </section>
 
-            <p class="command-bar" aria-hidden="true">
-                <span class="command-chip">[^H] home</span>
-                <span class="command-chip">[^B] biography</span>
-                <span class="command-chip">[^P] projects</span>
-                <span class="command-chip">[^U] uses</span>
-                <span class="command-chip">[^M] manifesto</span>
-                <span class="command-chip">[^C] contact</span>
-            </p>
+            <aside class="sidebar" aria-label="Session">
+                <p class="sidebar-title">Getting to know human Danny de Vries</p>
+
+                <div class="sidebar-group">
+                    <p class="sidebar-heading">Context</p>
+                    <p>Visitor #<span class="sidebar-visitor"></span></p>
+                    <p>4 if/else statements</p>
+                    <p>$0.00 spent</p>
+                </div>
+
+                <div class="sidebar-group">
+                    <p class="sidebar-heading">MCP</p>
+                    <p>• <span class="sidebar-strong">codeberg</span> Connected</p>
+                    <p>• <span class="sidebar-strong">espresso</span> Connected</p>
+                </div>
+
+                <div class="sidebar-group">
+                    <p class="sidebar-heading">▼ Sections</p>
+                    <ul class="sidebar-todo">
+                        <li class="current" data-section="home"><span class="todo-box">[ ]</span> Read the summary</li>
+                        <li data-section="biography"><span class="todo-box">[ ]</span> Print the biography</li>
+                        <li data-section="projects"><span class="todo-box">[ ]</span> Fetch active projects</li>
+                        <li data-section="uses"><span class="todo-box">[ ]</span> Query tools in use</li>
+                        <li data-section="manifesto"><span class="todo-box">[ ]</span> Compile the manifesto</li>
+                        <li data-section="contact"><span class="todo-box">[ ]</span> Get in touch</li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-footer">
+                    <p>~/andy@deckard</p>
+                    <p>• <span class="sidebar-strong">vriOS</span> <span class="commit-version">263-54</span></p>
+                </div>
+            </aside>
 
             <div class="search">
-                <label> &gt; </label>
-                <input
-                    id="search"
-                    type="text"
-                    autocomplete="off"
-                    autofocus
-                    placeholder="[:enter] commands here (-a for attribution, -o for options, -v for version or -q to quit)"
-                />
+                <p class="command-bar" aria-hidden="true">
+                    <span class="command-chip"><kbd>^H</kbd> home</span>
+                    <span class="command-chip"><kbd>^B</kbd> biography</span>
+                    <span class="command-chip"><kbd>^P</kbd> projects</span>
+                    <span class="command-chip"><kbd>^U</kbd> uses</span>
+                    <span class="command-chip"><kbd>^M</kbd> manifesto</span>
+                    <span class="command-chip"><kbd>^C</kbd> contact</span>
+                </p>
+
+                <div class="prompt">
+                    <input
+                        id="search"
+                        type="text"
+                        autocomplete="off"
+                        autofocus
+                        aria-label="Command"
+                        placeholder="[:enter] commands here"
+                    />
+                    <p class="prompt-meta">
+                        <span class="prompt-agent">AndyAI</span> Kalden 4.6
+                        <span class="prompt-dim">vriOS Zen</span>
+                    </p>
+                </div>
+
+                <p class="status-line">
+                    <span><kbd>enter</kbd> send</span>
+                    <span
+                        ><kbd>-a</kbd> attribution <kbd>-o</kbd> options
+                        <kbd>-v</kbd> version <kbd>-q</kbd> quit</span
+                    >
+                </p>
             </div>
         </div>
     </body>

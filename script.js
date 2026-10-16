@@ -180,11 +180,13 @@ const activateBooting = start(".booting", "hide", () => {
   localStorage.setItem(BOOT_STORAGE_KEY, Date.now().toString());
 });
 const activateIntro = start(".intro-shell", "show", playIntroSequence);
+const activateSidebar = start(".sidebar", "view");
 
 if (hasRecentBoot()) {
   activateSearch();
   activateBooting();
   activateIntro();
+  activateSidebar();
 }
 
 // What the assistant box narrates while "generating" each section. Written
@@ -307,8 +309,24 @@ document.addEventListener("DOMContentLoaded", function () {
   const assistantMessage = document.querySelector(
     ".box.assistant .intro-message",
   );
+  const sidebar = document.querySelector(".sidebar");
+  const sidebarTodos = Array.from(document.querySelectorAll(".sidebar-todo li"));
   let isShutdown = false; // Track shutdown state
   let revealTimeout = null;
+
+  // Mirrors opencode's todo list: the section being viewed is "in
+  // progress", and any section you've moved on from gets checked off.
+  function markSidebarSection(key) {
+    sidebarTodos.forEach((item) => {
+      if (item.classList.contains("current") && item.dataset.section !== key) {
+        item.classList.remove("current");
+        item.querySelector(".todo-box").textContent = "[✓]";
+      }
+      if (item.dataset.section === key) {
+        item.classList.add("current");
+      }
+    });
+  }
 
   // The intro's summary/options block plays its scanline reveal once,
   // timed to the boot sequence. Freeze it in its finished state once done
@@ -389,6 +407,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // into its final state so the summary never waits out that stale delay.
   function showHome() {
     setCommandBarVisible(false);
+    markSidebarSection("home");
     generateSection("home", () => {
       if (introGeneratedContent) {
         introGeneratedContent.style.animation = "none";
@@ -428,6 +447,7 @@ document.addEventListener("DOMContentLoaded", function () {
       intro.style.display = "none";
       introShell.style.display = "none";
       setCommandBarVisible(false);
+      if (sidebar) sidebar.classList.remove("view");
 
       // Show shutdown screen
       const shutdownScreen = document.querySelector(
@@ -465,6 +485,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     setCommandBarVisible(true);
+    markSidebarSection(matchedPanel.dataset.assistantKey);
     generateSection(matchedPanel.dataset.assistantKey, () => {
       matchedPanel.style.display = "block";
     });
@@ -480,6 +501,10 @@ document.addEventListener("DOMContentLoaded", function () {
 const randomNumber = Math.floor(Math.random() * 10001);
 const visitorElement = document.querySelector(".visitor");
 visitorElement.textContent = randomNumber;
+const sidebarVisitor = document.querySelector(".sidebar-visitor");
+if (sidebarVisitor) {
+  sidebarVisitor.textContent = randomNumber;
+}
 
 function getRandomJobTitle() {
   const jobTitles = [
