@@ -11,6 +11,18 @@
 
     <body>
         <div class="pixelate"></div>
+        <div class="screensaver" aria-hidden="true">
+            <div class="dvd-y">
+                <div class="dvd-x">
+                    <p class="screensaver-hint">
+                        &gt;&gt; Tap, click or hit [space] to continue session<span
+                            class="blink"
+                            >_</span
+                        >
+                    </p>
+                </div>
+            </div>
+        </div>
         <div class="splash">
             <h1 class="logo">vriOS</h1>
             <pre
@@ -25,6 +37,7 @@ _\/\\\\\\\\\\\\\\\_\/\\\\//\\\\/\\\_\/\\\_______\/\\\_______\/\\\_______\/\\\\\\
    _\/\\\_______\/\\\_\/\\\___\//\\\\\_\/\\\\\\\\\\\\/_________\/\\\_______\/\\\_______\/\\\__/\\\\\\\\\\\_
     _\///________\///__\///_____\/////__\////////////___________\///________\///________\///__\///////////__</code></pre>
             <section class="booting">
+                <span class="boot-loader-bar"></span>
                 <p class="step one">
                     vriOS // version: <span class="commit-version">263-54</span>
                 </p>
@@ -733,8 +746,6 @@ Koekle Djeminij ███████░░░░░░░░░░░░░ 34
             </section>
 
             <aside class="sidebar" aria-label="Session">
-                <p class="sidebar-title">Getting to know human Danny de Vries</p>
-
                 <div class="sidebar-group">
                     <p class="sidebar-heading">Context</p>
                     <p>Visitor #<span class="sidebar-visitor"></span></p>
@@ -743,13 +754,7 @@ Koekle Djeminij ███████░░░░░░░░░░░░░ 34
                 </div>
 
                 <div class="sidebar-group">
-                    <p class="sidebar-heading">MCP</p>
-                    <p>• <span class="sidebar-strong">codeberg</span> Connected</p>
-                    <p>• <span class="sidebar-strong">espresso</span> Connected</p>
-                </div>
-
-                <div class="sidebar-group">
-                    <p class="sidebar-heading">▼ Sections</p>
+                    <p class="sidebar-heading">Sections</p>
                     <ul class="sidebar-todo">
                         <li class="current" data-section="home"><span class="todo-box">[ ]</span> Read the summary</li>
                         <li data-section="biography"><span class="todo-box">[ ]</span> Print the biography</li>
@@ -758,6 +763,11 @@ Koekle Djeminij ███████░░░░░░░░░░░░░ 34
                         <li data-section="manifesto"><span class="todo-box">[ ]</span> Compile the manifesto</li>
                         <li data-section="contact"><span class="todo-box">[ ]</span> Get in touch</li>
                     </ul>
+                </div>
+
+                <div class="sidebar-group sidebar-mdr-group" aria-hidden="true">
+                    <p class="sidebar-heading">Macrodata Refinement</p>
+                    <div class="mdr-grid"></div>
                 </div>
 
                 <div class="sidebar-footer">

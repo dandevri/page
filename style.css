@@ -32,6 +32,8 @@
     --term-panel: oklch(22% 0.015 var(--hue));
     --term-sidebar: oklch(21% 0.012 var(--hue));
     --sidebar-w: 34ch;
+    /* room the sidebar takes up, including its margin from the edge */
+    --sidebar-space: calc(var(--sidebar-w) + var(--space-l));
 
     --term-accent-6: oklch(55% calc(var(--chroma) * 0.85) var(--hue));
     --term-accent-9: oklch(75% var(--chroma) var(--hue));
@@ -161,6 +163,27 @@ h1 {
 
 .password-hidden:hover::after {
     content: "secretpass";
+}
+
+/* Omarchy-style loader: a row of braille cells that flicker randomly,
+   filled in by script.js. Boot timeline: the AndyAI ascii art finishes
+   drawing at 1.5s, this pops in a second later (2.5s), and the boot
+   steps start typing a second after that (3.5s). */
+.boot-loader-bar {
+    display: block;
+    width: max-content;
+    margin-bottom: var(--space-l);
+    color: var(--term-fg);
+    white-space: pre;
+    letter-spacing: 0.1em;
+    opacity: 0;
+    animation: appear 0s 2.5s forwards;
+}
+
+@keyframes appear {
+    to {
+        opacity: 1;
+    }
 }
 
 .booting {
@@ -429,19 +452,19 @@ kbd {
 }
 
 .pct-22 {
-    animation: count-22 300ms steps(22, end) 4.4s forwards;
+    animation: count-22 300ms steps(22, end) 5.9s forwards;
 }
 
 .pct-43 {
-    animation: count-43 350ms steps(43, end) 4.59s forwards;
+    animation: count-43 350ms steps(43, end) 6.09s forwards;
 }
 
 .pct-68 {
-    animation: count-68 350ms steps(68, end) 4.74s forwards;
+    animation: count-68 350ms steps(68, end) 6.24s forwards;
 }
 
 .pct-97 {
-    animation: count-97 350ms steps(97, end) 4.85s forwards;
+    animation: count-97 350ms steps(97, end) 6.35s forwards;
 }
 
 .booting .step,
@@ -455,67 +478,67 @@ kbd {
 
 .one {
     --type-width: 26ch;
-    animation: typing 280ms steps(26, end) 2s forwards;
+    animation: typing 280ms steps(26, end) 3.5s forwards;
 }
 
 .two {
     --type-width: 42ch;
-    animation: typing 340ms steps(40, end) 2.15s forwards;
+    animation: typing 340ms steps(40, end) 3.65s forwards;
 }
 
 .three {
     --type-width: 50ch;
-    animation: typing 380ms steps(48, end) 2.3s forwards;
+    animation: typing 380ms steps(48, end) 3.8s forwards;
 }
 
 .four {
     --type-width: 34ch;
-    animation: typing 260ms steps(32, end) 2.5s forwards;
+    animation: typing 260ms steps(32, end) 4s forwards;
 }
 
 .five {
     --type-width: 40ch;
-    animation: typing 300ms steps(37, end) 2.65s forwards;
+    animation: typing 300ms steps(37, end) 4.15s forwards;
 }
 
 .six {
     --type-width: 39ch;
-    animation: typing 300ms steps(37, end) 4.1s forwards;
+    animation: typing 300ms steps(37, end) 5.6s forwards;
 }
 
 .seven {
     --type-width: 42ch;
-    animation: typing 340ms steps(40, end) 4.25s forwards;
+    animation: typing 340ms steps(40, end) 5.75s forwards;
 }
 
 .eight {
     --type-width: 42ch;
-    animation: typing 340ms steps(40, end) 4.4s forwards;
+    animation: typing 340ms steps(40, end) 5.9s forwards;
 }
 
 .nine {
     --type-width: 36ch;
-    animation: typing 300ms steps(34, end) 4.55s forwards;
+    animation: typing 300ms steps(34, end) 6.05s forwards;
 }
 
 .ten {
     --type-width: 32ch;
-    animation: typing 260ms steps(30, end) 6s forwards;
+    animation: typing 260ms steps(30, end) 7.5s forwards;
 }
 
 .eleven {
     --type-width: 48ch;
-    animation: typing 280ms steps(46, end) 6.15s forwards;
+    animation: typing 280ms steps(46, end) 7.65s forwards;
 }
 
 .highlight-one {
     --type-width: 23ch;
-    animation: typing 260ms steps(24, end) 3.4s forwards;
+    animation: typing 260ms steps(24, end) 4.9s forwards;
 }
 
 .highlight-two {
     --type-width: 30ch;
-    animation: typing 260ms steps(28, end) 5.3s forwards;
+    animation: typing 260ms steps(28, end) 6.8s forwards;
 }
 
 .pixelate {
@@ -551,7 +574,7 @@ kbd {
     position: fixed;
     bottom: 0;
     left: 0;
-    right: var(--sidebar-w);
+    right: var(--sidebar-space);
     padding: 0.75em var(--space-l) 0.5em;
     box-sizing: border-box;
     background: var(--term-bg);
@@ -595,9 +618,9 @@ kbd {
     display: none;
     flex-direction: column;
     position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
+    top: var(--space-l);
+    right: var(--space-l);
+    bottom: var(--space-l);
     width: var(--sidebar-w);
     padding: 1.5em;
     box-sizing: border-box;
@@ -617,7 +640,6 @@ kbd {
 }
 
 .sidebar-title,
-.sidebar-heading,
 .sidebar-strong {
     color: var(--term-bright);
     font-variation-settings: "wght" 600;
@@ -627,22 +649,98 @@ kbd {
     margin-bottom: 1.5em !important;
 }
 
+/* bordered boxes with their label sitting on the top border, like a
+   terminal dashboard (btop-style) */
 .sidebar-group {
-    margin-bottom: 1.5em;
+    position: relative;
+    margin-bottom: 1.75em;
+    padding: 1em 1em 0.75em;
+    border: 1px solid var(--term-dim);
+    border-radius: 3px;
+}
+
+.sidebar-heading,
+.sidebar-group-note {
+    position: absolute;
+    left: 0.75em;
+    padding: 0 0.5ch;
+    line-height: 1;
+    background: var(--term-sidebar);
+    color: var(--term-dim);
+}
+
+.sidebar-heading {
+    top: -0.5em;
+}
+
+.sidebar-group-note {
+    left: auto;
+    right: 0.75em;
+    bottom: -0.5em;
 }
 
 .sidebar-todo li.current {
     color: var(--term-fg);
 }
 
-.sidebar-footer {
+.sidebar-mdr-group {
     margin-top: auto;
+}
+
+/* Macrodata Refinement (Lumon Industries, from Severance): a grid of
+   numbers that drift gently on their own and swell around the cursor.
+   script.js fills the grid and sets --lift (0-1) per number on hover. */
+.mdr-grid {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    padding: 0.25em 0;
+    overflow: hidden;
+    color: var(--term-fg);
+    text-align: center;
+    line-height: 1.8;
+}
+
+.mdr-grid span {
+    --lift: 0;
+    display: block;
+    scale: calc(1 + var(--lift) * 1.3);
+    color: color-mix(
+        in oklch,
+        var(--term-bright) calc(var(--lift) * 100%),
+        var(--term-fg)
+    );
+    transition:
+        scale 150ms ease-out,
+        color 150ms ease-out;
+    animation: mdr-drift 3s ease-in-out infinite alternate;
+    animation-delay: var(--drift-delay, 0s);
+}
+
+@keyframes mdr-drift {
+    from {
+        translate: -0.08em -0.1em;
+    }
+
+    to {
+        translate: 0.08em 0.1em;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mdr-grid span {
+        animation: none;
+        transition: none;
+    }
+}
+
+.sidebar-footer {
+    margin-top: 0;
 }
 
 /* keep the main column clear of the fixed sidebar and prompt area */
 .splash:has(.sidebar.view) {
     box-sizing: border-box;
-    padding-right: var(--sidebar-w);
+    padding-right: var(--sidebar-space);
 }
 
 .splash:has(.search.view) {
@@ -652,6 +750,7 @@ kbd {
 @media (max-width: 900px) {
     :root {
         --sidebar-w: 0px;
+        --sidebar-space: 0px;
     }
 
     .sidebar.view {
@@ -742,7 +841,6 @@ figcaption {
     display: flex;
     justify-content: space-between;
     border-top: 1px dotted rgb(80, 80, 80);
-    margin-left: 2em;
     max-width: 30vw;
 }
 
@@ -1151,4 +1249,100 @@ dl {
 
 .stats .step {
     margin: 0;
+}
+
+/* Bouncing-DVD screensaver, shown after the tab has been out of focus.
+   Horizontal and vertical motion run on two nested elements with
+   different durations, so the logo traces the classic DVD path. Each
+   uses left/top (relative to the screen) plus a self-relative translate,
+   so the logo stops exactly at the edges whatever its size. */
+.screensaver {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    overflow: hidden;
+    background: var(--term-bg);
+}
+
+.screensaver-on .screensaver {
+    display: block;
+}
+
+.dvd-y {
+    position: absolute;
+    left: 0;
+    right: 0;
+    animation: dvd-y 5.3s linear infinite alternate;
+}
+
+.dvd-x {
+    position: relative;
+    width: max-content;
+    animation:
+        dvd-x 8.1s linear infinite alternate,
+        /* hop to a new colour every time it hits a side wall (every 8.1s) */
+        dvd-colour 32.4s steps(4) infinite;
+}
+
+.screensaver .asci {
+    margin: 0;
+    animation: none;
+    clip-path: none;
+}
+
+.screensaver-hint {
+    margin: 1em 0 0;
+    font-size: 0.75em;
+    color: var(--term-fg);
+}
+
+@keyframes dvd-x {
+    from {
+        left: 0;
+        translate: 0 0;
+    }
+
+    to {
+        left: 100%;
+        translate: -100% 0;
+    }
+}
+
+@keyframes dvd-y {
+    from {
+        top: 0;
+        translate: 0 0;
+    }
+
+    to {
+        top: 100%;
+        translate: 0 -100%;
+    }
+}
+
+@keyframes dvd-colour {
+    from {
+        filter: hue-rotate(0deg);
+    }
+
+    to {
+        filter: hue-rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dvd-y,
+    .dvd-x {
+        animation: none;
+    }
+
+    .dvd-y {
+        top: 50%;
+        translate: 0 -50%;
+    }
+
+    .dvd-x {
+        margin: 0 auto;
+    }
 }

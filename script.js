@@ -89,8 +89,22 @@ const originalFavicon = "/static/favicon.svg";
 const newTitle = "[ vriOS disabled ]";
 const newFavicon = "/static/favicon_disabled.svg";
 
+// Screensaver: reuse the AndyAI ascii art as the bouncing logo (the bounce
+// itself is pure CSS). Leaving the tab arms it; any key, click or scroll
+// on return dismisses it.
+document
+  .querySelector(".dvd-x")
+  .prepend(document.querySelector(".asci").cloneNode(true));
+
+["keydown", "pointerdown", "wheel"].forEach((type) =>
+  document.addEventListener(type, () =>
+    document.body.classList.remove("screensaver-on"),
+  ),
+);
+
 document.addEventListener("visibilitychange", function () {
   if (document.hidden) {
+    document.body.classList.add("screensaver-on");
     document.title = newTitle;
     changeFavicon(newFavicon);
   } else {
@@ -617,6 +631,73 @@ function updateAge() {
 // Update age immediately and then every second
 updateAge();
 setInterval(updateAge, 1000);
+
+const prefersReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)",
+).matches;
+
+/* Omarchy-style boot loader: a row of randomly flickering braille cells */
+const BOOT_LOADER_WIDTH = 24;
+const bootLoaderBar = document.querySelector(".boot-loader-bar");
+const bootingSection = document.querySelector(".booting");
+
+function renderBootLoader() {
+  let row = "";
+  for (let i = 0; i < BOOT_LOADER_WIDTH; i++) {
+    // U+2800 is the empty braille cell; the low 8 bits pick which dots show
+    row += String.fromCharCode(0x2800 + Math.floor(Math.random() * 256));
+  }
+  bootLoaderBar.textContent = row;
+}
+
+if (bootLoaderBar) {
+  renderBootLoader();
+  if (!prefersReducedMotion) {
+    const bootLoaderTimer = setInterval(() => {
+      // stop once the boot screen has been dismissed
+      if (bootingSection && bootingSection.classList.contains("hide")) {
+        clearInterval(bootLoaderTimer);
+        return;
+      }
+      renderBootLoader();
+    }, 90);
+  }
+}
+
+/* Macrodata Refinement grid in the sidebar (Lumon Industries, from
+   Severance): random numbers that swell and brighten around the cursor.
+   The drift and the scaling are CSS; this only fills the grid and feeds
+   each number how close the cursor is (--lift, 0-1). */
+const MDR_COLS = 9;
+const MDR_ROWS = 7;
+const MDR_RADIUS = 60; // px around the cursor that numbers react to
+const mdrGrid = document.querySelector(".mdr-grid");
+
+if (mdrGrid) {
+  for (let i = 0; i < MDR_COLS * MDR_ROWS; i++) {
+    const number = document.createElement("span");
+    number.textContent = Math.floor(Math.random() * 10);
+    // desync the idle drift so the grid doesn't move in lockstep
+    number.style.setProperty("--drift-delay", `${(-Math.random() * 3).toFixed(2)}s`);
+    mdrGrid.appendChild(number);
+  }
+  const numbers = Array.from(mdrGrid.children);
+
+  mdrGrid.addEventListener("pointermove", (event) => {
+    numbers.forEach((number) => {
+      const rect = number.getBoundingClientRect();
+      const distance = Math.hypot(
+        event.clientX - (rect.left + rect.width / 2),
+        event.clientY - (rect.top + rect.height / 2),
+      );
+      number.style.setProperty("--lift", Math.max(0, 1 - distance / MDR_RADIUS).toFixed(2));
+    });
+  });
+
+  mdrGrid.addEventListener("pointerleave", () => {
+    numbers.forEach((number) => number.style.setProperty("--lift", 0));
+  });
+}
 
 /* Text appearing like LLM effect */
 const aiElements = document.querySelectorAll(".ai");
