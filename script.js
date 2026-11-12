@@ -96,9 +96,16 @@ document
   .querySelector(".dvd-x")
   .prepend(document.querySelector(".asci").cloneNode(true));
 
-["keydown", "pointerdown", "wheel"].forEach((type) =>
-  document.addEventListener(type, () =>
-    document.body.classList.remove("screensaver-on"),
+["keydown", "pointerdown", "wheel", "touchmove"].forEach((type) =>
+  document.addEventListener(
+    type,
+    (event) => {
+      if (!document.body.classList.contains("screensaver-on")) return;
+      // the input that dismisses the screensaver shouldn't also scroll
+      event.preventDefault();
+      document.body.classList.remove("screensaver-on");
+    },
+    { passive: false },
   ),
 );
 
@@ -227,16 +234,6 @@ const SECTION_MESSAGES = {
     { text: "[contact]", highlight: true },
     " Danny right now. He reads everything himself, so don't be shy.",
   ],
-  uses: [
-    "Let me put together the full list of things Danny ",
-    { text: "[uses]", highlight: true },
-    " — the hardware, software and tools he relies on daily. This gets updated every time something in his setup changes.",
-  ],
-  manifesto: [
-    "One moment, compiling Danny's ",
-    { text: "[manifesto]", highlight: true },
-    " for you. It's the running list of principles that shape how he designs, builds and works.",
-  ],
   attribution: [
     "Pulling up the ",
     { text: "[attribution]", highlight: true },
@@ -250,7 +247,7 @@ const SECTION_MESSAGES = {
   options: [
     "Opening up the ",
     { text: "[options]", highlight: true },
-    " menu so you can tailor your experience. Feel free to switch up the theme, background or font to your liking.",
+    " menu so you can tailor your experience. Switch up the theme, borders or CRT scanlines to your liking.",
   ],
 };
 
@@ -316,13 +313,14 @@ document.addEventListener("DOMContentLoaded", function () {
   const introShell = document.querySelector(".intro-shell");
   const commandBar = document.querySelector(".command-bar");
   const assistantStatus = document.querySelector(".box.assistant .assistant-status");
-  const assistantSpinner = document.querySelector(".box.assistant .spinner");
+  const prompt = document.querySelector(".prompt");
   const assistantLoading = document.querySelector(
     ".box.assistant .assistant-loading",
   );
   const assistantMessage = document.querySelector(
     ".box.assistant .intro-message",
   );
+  const assistantMeta = document.querySelector(".box.assistant .assistant-meta");
   const sidebar = document.querySelector(".sidebar");
   const sidebarTodos = Array.from(document.querySelectorAll(".sidebar-todo li"));
   let isShutdown = false; // Track shutdown state
@@ -368,46 +366,47 @@ document.addEventListener("DOMContentLoaded", function () {
     assistantGeneration += 1;
     const myGeneration = assistantGeneration;
 
+    if (prompt) prompt.classList.add("busy");
+    const startedAt = performance.now();
+
+    // The silly loading word + spinner replace the "thought for" line for
+    // the whole generation, until the message has finished typing.
     if (assistantStatus) {
       assistantStatus.classList.add("active");
-    }
-    if (assistantSpinner) {
-      assistantSpinner.classList.remove("done");
     }
     if (assistantLoading) {
       assistantLoading.textContent =
         LOADING_WORDS[Math.floor(Math.random() * LOADING_WORDS.length)] +
         "...";
     }
+
+    // Lay out the new message straight away (its words stay invisible
+    // until they play), so the box resizes once, up front.
+    const segments = SECTION_MESSAGES[key];
+    let typingSeconds = 0;
     if (assistantMessage) {
-      assistantMessage.textContent = "";
+      if (segments) {
+        typingSeconds = renderAssistantWords(assistantMessage, segments);
+      } else {
+        assistantMessage.textContent = "";
+      }
     }
 
     revealTimeout = setTimeout(() => {
       if (assistantGeneration !== myGeneration) return;
 
-      if (assistantSpinner) {
-        assistantSpinner.classList.add("done");
-        setTimeout(() => {
-          if (assistantGeneration !== myGeneration) return;
-          if (assistantStatus) assistantStatus.classList.remove("active");
-        }, 250);
-      }
-      if (assistantLoading) {
-        assistantLoading.textContent = "";
-      }
-
-      const segments = SECTION_MESSAGES[key];
-      let typingSeconds = 0;
-      if (segments && assistantMessage) {
-        typingSeconds = renderAssistantWords(assistantMessage, segments);
-        requestAnimationFrame(() => {
-          if (assistantGeneration === myGeneration) playAssistantWords(assistantMessage);
-        });
-      }
+      if (segments && assistantMessage) playAssistantWords(assistantMessage);
 
       revealTimeout = setTimeout(() => {
         if (assistantGeneration !== myGeneration) return;
+        if (prompt) prompt.classList.remove("busy");
+        if (assistantStatus) assistantStatus.classList.remove("active");
+        if (assistantLoading) assistantLoading.textContent = "";
+        // the real time from sending the command to the section appearing
+        if (assistantMeta) {
+          assistantMeta.textContent = `✻ thought for ${Math.round(performance.now() - startedAt)}ms`;
+        }
+        if (assistantMessage) addUsage(estimateTokens(assistantMessage.textContent));
         revealContent();
       }, typingSeconds * 1000 + WORD_ANIMATION_MS);
     }, 900);
@@ -429,6 +428,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       intro.classList.add("reveal-panel");
       intro.style.display = "block";
+      addUsage(estimateTokens(intro.textContent));
     });
   }
 
@@ -462,6 +462,7 @@ document.addEventListener("DOMContentLoaded", function () {
       introShell.style.display = "none";
       setCommandBarVisible(false);
       if (sidebar) sidebar.classList.remove("view");
+      if (prompt) prompt.classList.remove("busy");
 
       // Show shutdown screen
       const shutdownScreen = document.querySelector(
@@ -502,6 +503,7 @@ document.addEventListener("DOMContentLoaded", function () {
     markSidebarSection(matchedPanel.dataset.assistantKey);
     generateSection(matchedPanel.dataset.assistantKey, () => {
       matchedPanel.style.display = "block";
+      addUsage(estimateTokens(matchedPanel.textContent));
     });
   }
 
@@ -518,6 +520,103 @@ visitorElement.textContent = randomNumber;
 const sidebarVisitor = document.querySelector(".sidebar-visitor");
 if (sidebarVisitor) {
   sidebarVisitor.textContent = randomNumber;
+}
+
+const prefersReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)",
+).matches;
+
+/* Sidebar context: a live clock, e.g. "12.11.26 14:03:22" */
+const sidebarClock = document.querySelector(".sidebar-clock");
+
+function updateSidebarClock() {
+  if (!sidebarClock) return;
+  const now = new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  const date = [now.getDate(), now.getMonth() + 1, now.getFullYear() % 100].map(pad).join(".");
+  const time = [now.getHours(), now.getMinutes(), now.getSeconds()].map(pad).join(":");
+  sidebarClock.textContent = `${date} ${time} (UTC +1)`;
+}
+
+updateSidebarClock();
+setInterval(updateSidebarClock, 1000);
+
+/* Sidebar usage meter: a rough token count (~4 characters per token) of
+   everything AndyAI has "generated" for this visitor, against a small
+   context window, with the cost in guilders */
+const USAGE_LIMIT = 8192; // tokens
+const USAGE_PRICE = 0.0004; // guilders per token
+const USAGE_BAR_WIDTH = 24; // characters
+let usageTokens = 0;
+
+function estimateTokens(text) {
+  return Math.ceil(text.replace(/\s+/g, " ").trim().length / 4);
+}
+
+function addUsage(tokens) {
+  usageTokens = Math.min(USAGE_LIMIT, usageTokens + tokens);
+  const used = Math.round((usageTokens / USAGE_LIMIT) * USAGE_BAR_WIDTH);
+  const format = (n) => n.toLocaleString("en-US");
+
+  const bar = document.querySelector(".usage-bar");
+  if (bar) {
+    bar.innerHTML =
+      `<span class="usage-used">${"⣿".repeat(used)}</span>` +
+      `<span class="usage-left">${"⣿".repeat(USAGE_BAR_WIDTH - used)}</span>`;
+  }
+  const set = (selector, value) => {
+    const el = document.querySelector(selector);
+    if (el) el.textContent = value;
+  };
+  set(".usage-percent", Math.round((usageTokens / USAGE_LIMIT) * 100));
+  set(".usage-limit", `·${format(USAGE_LIMIT)} tok/s`);
+  set(".usage-cost", `ƒ${(usageTokens * USAGE_PRICE).toFixed(2)}`);
+}
+
+// the greeting and homepage count as the first thing generated
+addUsage(
+  estimateTokens(
+    (document.querySelector(".intro-message")?.textContent || "") +
+      (document.querySelector(".intro")?.textContent || ""),
+  ),
+);
+
+/* Sidebar signal: two rows of -=+* drifting left like a live readout.
+   Each row is a slow random walk, so neighbouring characters stay close. */
+const SIGNAL_WIDTH = 20;
+const SIGNAL_RAMP = "-=+*";
+const signalWave = document.querySelector(".signal-wave");
+const signalRows = [0, 1].map(() => {
+  let level = Math.random();
+  return Array.from({ length: SIGNAL_WIDTH }, () => {
+    level = Math.min(1, Math.max(0, level + (Math.random() - 0.5) * 0.35));
+    return level;
+  });
+});
+
+function renderSignal() {
+  signalWave.textContent = signalRows
+    .map((row) =>
+      row
+        .map((level) => SIGNAL_RAMP[Math.min(SIGNAL_RAMP.length - 1, Math.floor(level * SIGNAL_RAMP.length))])
+        .join(""),
+    )
+    .join("\n");
+}
+
+if (signalWave) {
+  renderSignal();
+  if (!prefersReducedMotion) {
+    setInterval(() => {
+      if (document.hidden) return;
+      signalRows.forEach((row) => {
+        const last = row[row.length - 1];
+        row.shift();
+        row.push(Math.min(1, Math.max(0, last + (Math.random() - 0.5) * 0.35)));
+      });
+      renderSignal();
+    }, 120);
+  }
 }
 
 function getRandomJobTitle() {
@@ -632,10 +731,6 @@ function updateAge() {
 updateAge();
 setInterval(updateAge, 1000);
 
-const prefersReducedMotion = window.matchMedia(
-  "(prefers-reduced-motion: reduce)",
-).matches;
-
 /* Omarchy-style boot loader: a row of randomly flickering braille cells */
 const BOOT_LOADER_WIDTH = 24;
 const bootLoaderBar = document.querySelector(".boot-loader-bar");
@@ -662,41 +757,6 @@ if (bootLoaderBar) {
       renderBootLoader();
     }, 90);
   }
-}
-
-/* Macrodata Refinement grid in the sidebar (Lumon Industries, from
-   Severance): random numbers that swell and brighten around the cursor.
-   The drift and the scaling are CSS; this only fills the grid and feeds
-   each number how close the cursor is (--lift, 0-1). */
-const MDR_COLS = 9;
-const MDR_ROWS = 7;
-const MDR_RADIUS = 60; // px around the cursor that numbers react to
-const mdrGrid = document.querySelector(".mdr-grid");
-
-if (mdrGrid) {
-  for (let i = 0; i < MDR_COLS * MDR_ROWS; i++) {
-    const number = document.createElement("span");
-    number.textContent = Math.floor(Math.random() * 10);
-    // desync the idle drift so the grid doesn't move in lockstep
-    number.style.setProperty("--drift-delay", `${(-Math.random() * 3).toFixed(2)}s`);
-    mdrGrid.appendChild(number);
-  }
-  const numbers = Array.from(mdrGrid.children);
-
-  mdrGrid.addEventListener("pointermove", (event) => {
-    numbers.forEach((number) => {
-      const rect = number.getBoundingClientRect();
-      const distance = Math.hypot(
-        event.clientX - (rect.left + rect.width / 2),
-        event.clientY - (rect.top + rect.height / 2),
-      );
-      number.style.setProperty("--lift", Math.max(0, 1 - distance / MDR_RADIUS).toFixed(2));
-    });
-  });
-
-  mdrGrid.addEventListener("pointerleave", () => {
-    numbers.forEach((number) => number.style.setProperty("--lift", 0));
-  });
 }
 
 /* Text appearing like LLM effect */
@@ -733,8 +793,9 @@ aiElements.forEach((el) => {
 function playIntroSequence() {
   const myGeneration = assistantGeneration;
   const introStatus = document.querySelector(".box.assistant .assistant-status");
-  const introSpinner = document.querySelector(".box.assistant .spinner");
   const introLoading = document.querySelector(".box.assistant .assistant-loading");
+  const introMeta = document.querySelector(".box.assistant .assistant-meta");
+  const startedAt = performance.now();
 
   if (introStatus) {
     introStatus.classList.add("active");
@@ -749,31 +810,54 @@ function playIntroSequence() {
     // busy narrating that instead - don't clobber it with the stale greeting.
     if (assistantGeneration !== myGeneration) return;
 
-    if (introSpinner) {
-      introSpinner.classList.add("done");
-      // fully collapse the placeholder once its fade-out finishes
-      setTimeout(() => {
-        if (assistantGeneration !== myGeneration) return;
-        if (introStatus) introStatus.classList.remove("active");
-      }, 250);
-    }
-    if (introLoading) {
-      introLoading.textContent = "";
-    }
-
+    let lastWordDelay = 0;
     aiElements.forEach((el) => {
       el.querySelectorAll(".word").forEach((span) => {
         span.style.animationPlayState = "running";
+        lastWordDelay = Math.max(lastWordDelay, parseFloat(span.style.animationDelay) || 0);
       });
     });
+
+    // once the greeting has fully typed out, report how long it all took
+    setTimeout(() => {
+      if (assistantGeneration !== myGeneration) return;
+      if (introStatus) introStatus.classList.remove("active");
+      if (introLoading) introLoading.textContent = "";
+      if (introMeta) {
+        introMeta.textContent = `✻ thought for ${Math.round(performance.now() - startedAt)}ms`;
+      }
+    }, lastWordDelay * 1000 + WORD_ANIMATION_MS);
   }, 2000);
 }
 
-/* Options screen: radio-style selectable rows with a hover/focus preview */
+/* Options screen: radio-style selectable rows with a hover/focus preview.
+   Each group sets a data-* attribute on <html> (data-theme, data-border,
+   data-crt) which the CSS styles from, and is remembered in
+   localStorage (restored before paint by the inline script in <head>). */
+const SETTINGS_KEY = "vrios-settings";
+
+function saveSetting(name, value) {
+  let saved = {};
+  try {
+    saved = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
+  } catch (e) {}
+  saved[name] = value;
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(saved));
+}
+
 document.querySelectorAll(".options").forEach((group) => {
   const buttons = Array.from(group.querySelectorAll(".option"));
+  const setting = group.dataset.setting;
 
   function select(target) {
+    if (setting && target.dataset.value) {
+      document.documentElement.dataset[setting] = target.dataset.value;
+      saveSetting(setting, target.dataset.value);
+    }
+    markActive(target);
+  }
+
+  function markActive(target) {
     buttons.forEach((button) => {
       const checked = button === target;
       button.classList.toggle("active", checked);
@@ -802,4 +886,9 @@ document.querySelectorAll(".options").forEach((group) => {
       if (!button.classList.contains("active")) check.textContent = "[ ]";
     });
   });
+
+  // show the restored (saved) setting as the selected row
+  const current = setting && document.documentElement.dataset[setting];
+  const currentButton = buttons.find((button) => button.dataset.value === current);
+  if (currentButton) markActive(currentButton);
 });
